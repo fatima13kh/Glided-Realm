@@ -1,0 +1,63 @@
+const mongoose = require('mongoose');
+
+const userSchema = new mongoose.Schema({
+  title : {
+    type: String,
+    required: true,
+  },
+  type: { // enum
+    type: String,
+    enum: ['Venue', 'Ballet', 'Runway','Art Gallery'],
+  },
+  datePosted: {
+    type: Date,
+    required: true,
+  },
+  eventDate: {
+    type: Date,
+    required: true,
+  },
+  location: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+    min: 1,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  performers: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
+  bookingPhoneNumber: {
+    type: String,
+    required: true,
+  },
+  owner : {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  attendees: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
+  ticketQuantity: {
+    type: Number,
+    required: true,
+    min : 1,
+  },
+});
+
+const Event = mongoose.model('Event', userSchema);
+
+module.exports = Event;

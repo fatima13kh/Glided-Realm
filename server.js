@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 
 dotenv.config();
-require('./config/databse.js');
+require('./config/database.js');
 const express = require('express');
 
 const app = express();
