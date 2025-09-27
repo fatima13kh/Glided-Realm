@@ -1,12 +1,14 @@
 <nav>
   <a href="/">Home</a>
-
-  <% if (user) { %>
-    <a href="/users/<%= currentUser._id %>">Profile</a>
-    <a href="/events/Venue">Venue</a>
+  <a href="/events">Events</a>
+  <a href="/events/Venue">Venue</a>
     <a href="/events/Ballet">Ballet</a>
     <a href="/events/Runway">Runway</a>
     <a href="/events/Art%20Gallery">Art Gallery</a>
+
+
+  <% if (user) { %>
+    <a href="/users/<%= user._id %>">Profile</a>
     <a href="/auth/sign-out">Sign Out</a>
   <% } else { %>
     <a href="/auth/sign-in">Sign In</a>

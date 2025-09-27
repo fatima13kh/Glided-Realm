@@ -12,11 +12,15 @@
         <input type="text" name="title" id="title" required />
         <label for="type">Type:</label>
         <select name="type" id="type" required>
+            <option value="">Select Event Type..</option>
             <option value="Venue">Venue</option>
             <option value="Ballet">Ballet</option>
             <option value="Runway">Runway</option>
             <option value="Art Gallery">Art Gallery</option>
         </select>
+        <small style="display:block; margin-top:4px; color:#666;">
+    * Venue include events like Parties, Theatre, or Opera.
+</small>
         <label for="eventDate">Event Date:</label>
         <input type="date" name="eventDate" id="eventDate" required />
         <label for="location">Location:</label>
@@ -25,7 +29,8 @@
     <textarea name="description" id="description" rows="5" cols="40" placeholder="Enter a detailed description..."></textarea>
         <label for="performers">Performers:</label>
 <input type="text" name="performers" id="performers" placeholder="Enter performers separated by commas" />
-
+    <label for="bookingPhoneNumber">Booking Phone Number:</label>
+        <input type="tel" name="bookingPhoneNumber" id="bookingPhoneNumber" required />
         <label for="price">Price:</label>
         <input type="number" name="price" id="price" min="1" />
         <label for="ticketQuantity">Ticket Quantity:</label>
