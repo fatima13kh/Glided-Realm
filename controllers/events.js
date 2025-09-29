@@ -123,10 +123,52 @@ router.get('/:eventId', async (req, res) => {
     const populatedEvent = await Event.findById(
       req.params.eventId
     ).populate('owner');
+console.log(populatedEvent)
+    const userHasFavorited = populatedEvent.owner.favoritedByUsers.some((user) =>
+      user.equals(req.session.user._id)
+    );
 
     res.render('events/show.ejs', {
       event: populatedEvent,
+      userHasFavorited,
     });
+  } catch (error) {
+    console.log(error);
+    res.redirect('/');
+  }
+});
+
+
+
+
+
+
+//delete event route
+
+router.delete('/:eventId', async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.eventId);
+    if (event.owner.equals(req.session.user._id)) {
+      await event.deleteOne();
+      res.redirect('/events');
+    } else {
+      res.send("You don't have permission to do that.");
+    }
+  } catch (error) {
+    console.error(error);
+    res.redirect('/');
+  }
+});
+
+
+//favourite an event
+
+router.post('/:eventId/favorited-by/:userId', async (req, res) => {
+  try {
+    await Event.findByIdAndUpdate(req.params.eventId, {
+      $push: { favoritedByUsers: req.params.userId },
+    });
+    res.redirect(`/events/${req.params.eventId}`);
   } catch (error) {
     console.log(error);
     res.redirect('/');

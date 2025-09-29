@@ -17,12 +17,35 @@
     <p>Location: <%= event.location %></p>
     <p>Description: <%= event.description %></p>
     <p>Performers: <%= event.performers.join(', ') %></p>
+    <h2>Favorites</h2>
+<p>Favorited by <%= event.owner.favoritedByUsers.length %> people.</p>
+<form
+  action="/events/<%= event._id %>/favorited-by/<%= user._id %>"
+  method="POST"
+>
+
+<% if (userHasFavorited) { %>
+<p>You've favorited this listing!</p>
+<% } else { %>
+<p>You haven't favorited this listing.</p>
+  <button type="submit">Favorite it!</button>
+</form>
+<%}%>
 
      <h2>Owner</h2>
   <% if (event.owner._id.equals(user._id)) { %>
     <p>You own this!</p>
+
+
+    <form action="/events/<%= event._id %>?_method=DELETE" method="POST">
+        <button type="submit">Delete this event</button>
+    </form>
   <% } else { %>
     <p>Event Owner: <%= event.owner.username %></p>
   <% } %>
+
+
+  
+  
   </body>
 </html>
