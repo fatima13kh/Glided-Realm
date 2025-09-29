@@ -6,6 +6,10 @@
     <title>Add new Listing</title>
 </head>
 <body> 
+     <% if (error) { %>
+    <p style="color: red;"><%= error %></p>
+  <% } %>
+  
     <h1>Add a New Event</h1>
     <form action="/events" method="POST">
         <label for="title">Title:</label>
@@ -23,6 +27,14 @@
 </small>
         <label for="eventDate">Event Date:</label>
         <input type="date" name="eventDate" id="eventDate" required />
+       
+        <label for="startTime">Start Time:</label>
+<input type="time" name="startTime" id="startTime" value="<%= formData?.startTime || '' %>" required />
+
+<label for="endTime">End Time:</label>
+<input type="time" name="endTime" id="endTime" value="<%= formData?.endTime || '' %>" required />
+
+
         <label for="location">Location:</label>
         <input type="text" name="location" id="location" required />
         <label for="description">Description:</label>

@@ -12,9 +12,18 @@ const userSchema = new mongoose.Schema({
   datePosted: {
     type: Date,
     required: true,
+    default: Date.now,
   },
   eventDate: {
     type: Date,
+    required: true,
+  },
+  startTime: {
+    type: String, 
+    required: true,
+  },
+  endTime: {
+    type: String, 
     required: true,
   },
   location: {
