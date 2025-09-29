@@ -81,6 +81,7 @@ router.post('/', async (req, res) => {
 
         const startDateTime = parseTime(req.body.eventDate, req.body.startTime);
         const endDateTime = parseTime(req.body.eventDate, req.body.endTime);
+        
 
         if (endDateTime <= startDateTime) {
             return res.render('events/new.ejs', {
@@ -92,6 +93,13 @@ router.post('/', async (req, res) => {
 
         // Convert performers to array if needed
         if (typeof req.body.performers === 'string') {
+            if (!req.body.performers.includes(',')) {
+                return res.render('events/new.ejs', {
+                error: 'Performers must be separated by commas.',
+                formData: req.body,
+                times
+            });
+    }
             req.body.performers = req.body.performers.split(',').map(p => p.trim());
         }
 
