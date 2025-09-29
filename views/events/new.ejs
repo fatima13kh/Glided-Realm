@@ -28,11 +28,21 @@
         <label for="eventDate">Event Date:</label>
         <input type="date" name="eventDate" id="eventDate" required />
        
-        <label for="startTime">Start Time:</label>
-<input type="time" name="startTime" id="startTime" value="<%= formData?.startTime || '' %>" required />
+       <label for="startTime">Start Time:</label>
+<select name="startTime" id="startTime" required>
+  <option value="">-- Select Start Time --</option>
+  <% times.forEach(time => { %>
+    <option value="<%= time %>" <%= formData.startTime === time ? 'selected' : '' %>><%= time %></option>
+  <% }) %>
+</select>
 
 <label for="endTime">End Time:</label>
-<input type="time" name="endTime" id="endTime" value="<%= formData?.endTime || '' %>" required />
+<select name="endTime" id="endTime" required>
+  <option value="">-- Select End Time --</option>
+  <% times.forEach(time => { %>
+    <option value="<%= time %>" <%= formData.endTime === time ? 'selected' : '' %>><%= time %></option>
+  <% }) %>
+</select>
 
 
         <label for="location">Location:</label>
