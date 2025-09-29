@@ -12,6 +12,7 @@
   <% events.forEach((event) => { %>
   <li>
     An event titled "<%= event.title %>" of type "<%= event.type %>".
+    <a href="/events/<%= event._id %>">View more details.</a>
   </li>
   <% }) %>
 </ul>

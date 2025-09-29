@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= event.owner.username %>'s event</title>
+  </head>
+  <body>
+    <%- include('../partials/_navbar.ejs') %>
+
+    <h1>A event in <%= event.city %></h1>
+
+    <h2>Details</h2>
+   <p>Event Date: <%= event.eventDate.getFullYear() %>-<%= (event.eventDate.getMonth()+1).toString().padStart(2,'0') %>-<%= event.eventDate.getDate().toString().padStart(2,'0') %></p>
+    <p>Start Time: <%= event.startTime %></p>
+    <p>End Time: <%= event.endTime %></p>
+    <p>Location: <%= event.location %></p>
+    <p>Description: <%= event.description %></p>
+    <p>Performers: <%= event.performers.join(', ') %></p>
+
+     <h2>Owner</h2>
+  <% if (event.owner._id.equals(user._id)) { %>
+    <p>You own this!</p>
+  <% } else { %>
+    <p>Event Owner: <%= event.owner.username %></p>
+  <% } %>
+  </body>
+</html>

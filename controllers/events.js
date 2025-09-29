@@ -116,4 +116,22 @@ router.post('/', async (req, res) => {
     }
 });
 
+// show event details
+
+router.get('/:eventId', async (req, res) => {
+  try {
+    const populatedEvent = await Event.findById(
+      req.params.eventId
+    ).populate('owner');
+
+    res.render('events/show.ejs', {
+      event: populatedEvent,
+    });
+  } catch (error) {
+    console.log(error);
+    res.redirect('/');
+  }
+});
+
+
 module.exports = router;
