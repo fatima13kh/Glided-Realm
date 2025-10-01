@@ -22,31 +22,26 @@
     <h2>Favourites</h2>
 <p>Favourited by <%= favouritedCount %> people.</p>
 
-<% if (user) { %>
-  <form action="/events/<%= event._id %>/favourite" method="POST">
-    <% if (userHasFavorited) { %>
-      <button type="submit">Unfavourite</button>
-    <% } else { %>
-      <button type="submit">Favourite</button>
-    <% } %>
+<form action="/events/<%= event._id %>/favourite" method="POST">
+  <% if (user && userHasFavorited) { %>
+    <button type="submit">Unfavourite</button>
+  <% } else { %>
+    <button type="submit">Favourite</button>
+  <% } %>
+</form>
+
+
+
+<h2>Owner</h2>
+<% if (user && event.owner._id.equals(user._id)) { %>
+  <p>You own this!</p>
+
+  <form action="/events/<%= event._id %>?_method=DELETE" method="POST">
+      <button type="submit">Delete this event</button>
   </form>
 <% } else { %>
-  <p><a href="/auth/sign-in">Login</a> to favourite this event.</p>
+  <p>Event Owner: <%= event.owner.username %></p>
 <% } %>
-
-
-
-     <h2>Owner</h2>
-  <% if (event.owner._id.equals(user._id)) { %>
-    <p>You own this!</p>
-
-
-    <form action="/events/<%= event._id %>?_method=DELETE" method="POST">
-        <button type="submit">Delete this event</button>
-    </form>
-  <% } else { %>
-    <p>Event Owner: <%= event.owner.username %></p>
-  <% } %>
 
 
   
