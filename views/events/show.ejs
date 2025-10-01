@@ -17,20 +17,24 @@
     <p>Location: <%= event.location %></p>
     <p>Description: <%= event.description %></p>
     <p>Performers: <%= event.performers.join(', ') %></p>
-    <h2>Favorites</h2>
-<p>Favorited by <%= event.owner.favoritedByUsers.length %> people.</p>
-<form
-  action="/events/<%= event._id %>/favorited-by/<%= user._id %>"
-  method="POST"
->
 
-<% if (userHasFavorited) { %>
-<p>You've favorited this listing!</p>
+
+    <h2>Favourites</h2>
+<p>Favourited by <%= favouritedCount %> people.</p>
+
+<% if (user) { %>
+  <form action="/events/<%= event._id %>/favourite" method="POST">
+    <% if (userHasFavorited) { %>
+      <button type="submit">Unfavourite</button>
+    <% } else { %>
+      <button type="submit">Favourite</button>
+    <% } %>
+  </form>
 <% } else { %>
-<p>You haven't favorited this listing.</p>
-  <button type="submit">Favorite it!</button>
-</form>
-<%}%>
+  <p><a href="/auth/sign-in">Login</a> to favourite this event.</p>
+<% } %>
+
+
 
      <h2>Owner</h2>
   <% if (event.owner._id.equals(user._id)) { %>

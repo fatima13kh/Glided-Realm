@@ -18,10 +18,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  favoritedByUsers: [
+  favourites: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Event',
     },
   ],
   bookings: [

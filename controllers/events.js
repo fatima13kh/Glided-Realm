@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const Event = require('../models/event');
+const User = require('../models/user');
+
 
 function generateTimes() {
     const times = [];
@@ -120,29 +122,33 @@ router.post('/', async (req, res) => {
 
 router.get('/:eventId', async (req, res) => {
   try {
-    const populatedEvent = await Event.findById(
-      req.params.eventId
-    ).populate('owner');
-console.log(populatedEvent)
-    const userHasFavorited = populatedEvent.owner.favoritedByUsers.some((user) =>
-      user.equals(req.session.user._id)
-    );
+   const event = await Event.findById(req.params.eventId).populate('owner');
+    if (!event) return res.redirect('/events');
+
+    let userHasFavorited = false;
+
+    if (req.session.user) {
+      const user = await User.findById(req.session.user._id);
+      userHasFavorited = user.favourites.some(fav => fav.equals(event._id));
+    }
+
+    // count number of people who have favorited the event
+    const favouritedCount = await User.countDocuments({ favourites: event._id });
 
     res.render('events/show.ejs', {
-      event: populatedEvent,
+      event,
       userHasFavorited,
+      favouritedCount
+  
+      
     });
   } catch (error) {
     console.log(error);
     res.redirect('/');
   }
-});
+  });
 
-
-
-
-
-
+  
 //delete event route
 
 router.delete('/:eventId', async (req, res) => {
@@ -161,19 +167,33 @@ router.delete('/:eventId', async (req, res) => {
 });
 
 
-//favourite an event
-
-router.post('/:eventId/favorited-by/:userId', async (req, res) => {
+// favourite and unfavourite event route
+  router.post('/:eventId/favourite', async (req, res) => {
   try {
-    await Event.findByIdAndUpdate(req.params.eventId, {
-      $push: { favoritedByUsers: req.params.userId },
-    });
-    res.redirect(`/events/${req.params.eventId}`);
-  } catch (error) {
-    console.log(error);
+    if (!req.session.user) {
+      return res.redirect('/auth/sign-in'); // redirect to sign in
+    }
+
+    const user = await User.findById(req.session.user._id);
+    const eventId = req.params.eventId;
+
+    const alreadyFavorited = user.favourites.includes(eventId);
+
+    if (alreadyFavorited) {
+      user.favourites.pull(eventId); // remove from favorites
+    } else {
+      user.favourites.push(eventId); // add to favorites
+    }
+
+    await user.save();
+    res.redirect(`/events/${eventId}`);
+  } catch (err) {
+    console.error(err);
     res.redirect('/');
   }
 });
+
+
 
 
 module.exports = router;
