@@ -18,6 +18,8 @@ const authController = require('./controllers/auth.js');
 
 const eventController = require('./controllers/events.js');
 
+const userController = require('./controllers/users.js');
+
 // Set the port from environment variable or default to 3000
 const PORT = process.env.PORT ? process.env.PORT : '3000';
 
@@ -53,6 +55,8 @@ app.get('/', (req, res) => {
 app.use('/auth', authController);
 
 app.use('/events', eventController);
+
+app.use('/users', isSignedIn, userController);
 
 // PROTECTED
 

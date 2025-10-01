@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= profileUser.username %>'s Profile</title>
+</head>
+<body>
+    <%- include('../partials/_navbar.ejs') %>
+    
+    <h1><%= profileUser.username %>'s Profile</h1>
+
+    <h2>Posted Events</h2>
+    <% if (postedEvents.length > 0) { %>
+        <ul>
+            <% postedEvents.forEach(event => { %>
+                <li><a href="/events/<%= event._id %>"><%= event.title %></a></li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No events posted yet.</p>
+    <% } %>
+
+    <h2>Favourite Events</h2>
+    <% if (favouriteEvents.length > 0) { %>
+        <ul>
+            <% favouriteEvents.forEach(event => { %>
+                <li><a href="/events/<%= event._id %>"><%= event.title %></a></li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No favourite events yet.</p>
+    <% } %>
+
+    <h2>Booked Events</h2>
+    <% if (bookedEvents.length > 0) { %>
+        <ul>
+            <% bookedEvents.forEach(event => { %>
+                <li><a href="/events/<%= event._id %>"><%= event.title %></a></li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No booked events yet.</p>
+    <% } %>
+</body>
+</html>

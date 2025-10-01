@@ -70,7 +70,7 @@ router.post('/', async (req, res) => {
             });
         }
 
-        // Helper: Parse 12h AM/PM time string into Date object
+        //Parse 12h AM/PM time string into Date object
         function parseTime(dateStr, timeStr) {
             const [time, period] = timeStr.split(' ');
             let [hours, minutes] = time.split(':').map(Number);
@@ -165,6 +165,114 @@ router.delete('/:eventId', async (req, res) => {
     res.redirect('/');
   }
 });
+
+// edit event route
+router.get('/:eventId/edit', async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.eventId);
+    if (!event) return res.redirect('/events');
+
+    // Check if current user is the owner
+    if (!event.owner.equals(req.session.user._id)) {
+      return res.redirect(`/events/${event._id}`); // redirect to show page
+    }
+
+    const times = generateTimes(); // for start/end time dropdown
+
+    res.render('events/edit.ejs', {
+      event,
+      formData: event, // prefill form with current event data
+      times,
+      error: null
+    });
+  } catch (err) {
+    console.error(err);
+    res.redirect('/events');
+  }
+});
+
+// update event route
+router.put('/:eventId', async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.eventId);
+    if (!event) return res.redirect('/events');
+
+    if (!event.owner.equals(req.session.user._id)) {
+      return res.redirect(`/events/${event._id}`);
+    }
+
+    const times = generateTimes(); // for re-rendering
+
+    const now = new Date();
+    const eventDate = new Date(req.body.eventDate);
+
+    // Validate event date
+    if (
+      eventDate.getFullYear() < now.getFullYear() ||
+      (eventDate.getFullYear() === now.getFullYear() &&
+        eventDate.getMonth() < now.getMonth()) ||
+      (eventDate.getFullYear() === now.getFullYear() &&
+        eventDate.getMonth() === now.getMonth() &&
+        eventDate.getDate() <= now.getDate())
+    ) {
+      return res.render('events/edit.ejs', {
+        event,
+        formData: req.body,
+        times,
+        error: 'Event date cannot be the same or in the past.'
+      });
+    }
+
+    // Parse time helper
+    function parseTime(dateStr, timeStr) {
+      const [time, period] = timeStr.split(' ');
+      let [hours, minutes] = time.split(':').map(Number);
+      if (period === 'PM' && hours !== 12) hours += 12;
+      if (period === 'AM' && hours === 12) hours = 0;
+      const dateTime = new Date(dateStr);
+      dateTime.setHours(hours, minutes, 0, 0);
+      return dateTime;
+    }
+
+    const startDateTime = parseTime(req.body.eventDate, req.body.startTime);
+    const endDateTime = parseTime(req.body.eventDate, req.body.endTime);
+
+    if (endDateTime <= startDateTime) {
+      return res.render('events/edit.ejs', {
+        event,
+        formData: req.body,
+        times,
+        error: 'End time must be later than start time.'
+      });
+    }
+
+    // Convert performers to array if needed
+    if (typeof req.body.performers === 'string') {
+      if (!req.body.performers.includes(',')) {
+        return res.render('events/edit.ejs', {
+          event,
+          formData: req.body,
+          times,
+          error: 'Performers must be separated by commas.'
+        });
+      }
+      req.body.performers = req.body.performers.split(',').map(p => p.trim());
+    }
+
+    await Event.findByIdAndUpdate(req.params.eventId, req.body, { new: true });
+    res.redirect(`/events/${req.params.eventId}`);
+  } catch (err) {
+    console.error(err);
+    const times = generateTimes();
+    res.render('events/edit.ejs', {
+      event: req.body,
+      formData: req.body,
+      times,
+      error: 'There was an error updating the event.'
+    });
+  }
+});
+
 
 
 // favourite and unfavourite event route

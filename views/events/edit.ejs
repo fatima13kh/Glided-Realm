@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit <%= formData.title %> Event</title>
+</head>
+<body> 
+    <% if (error) { %>
+        <p style="color: red;"><%= error %></p>
+    <% } %>
+
+    <h1>Edit <%= formData.title %> Event</h1>
+    <form action="/events/<%= formData._id %>?_method=PUT" method="POST">
+        <!-- Title -->
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="title" required value="<%= formData.title || '' %>" />
+
+        <!-- Type -->
+        <label for="type">Type:</label>
+        <select name="type" id="type" required>
+            <option value="">Select Event Type..</option>
+            <option value="Venue" <%= formData.type === 'Venue' ? 'selected' : '' %>>Venue</option>
+            <option value="Ballet" <%= formData.type === 'Ballet' ? 'selected' : '' %>>Ballet</option>
+            <option value="Runway" <%= formData.type === 'Runway' ? 'selected' : '' %>>Runway</option>
+            <option value="Art Gallery" <%= formData.type === 'Art Gallery' ? 'selected' : '' %>>Art Gallery</option>
+        </select>
+
+        <!-- Event Date -->
+        <label for="eventDate">Event Date:</label>
+        <input type="date" name="eventDate" id="eventDate" required 
+         value="<%= formData.eventDate ? new Date(formData.eventDate).toISOString().slice(0,10) : '' %>" />
+
+
+        <!-- Start Time -->
+        <label for="startTime">Start Time:</label>
+        <select name="startTime" id="startTime" required>
+            <% times.forEach(time => { %>
+                <option value="<%= time %>" <%= formData.startTime === time ? 'selected' : '' %>><%= time %></option>
+            <% }) %>
+        </select>
+
+        <!-- End Time -->
+        <label for="endTime">End Time:</label>
+        <select name="endTime" id="endTime" required>
+            <% times.forEach(time => { %>
+                <option value="<%= time %>" <%= formData.endTime === time ? 'selected' : '' %>><%= time %></option>
+            <% }) %>
+        </select>
+
+        <!-- Location -->
+        <label for="location">Location:</label>
+        <input type="text" name="location" id="location" required value="<%= formData.location || '' %>" />
+
+        <!-- Description -->
+        <label for="description">Description:</label>
+        <textarea name="description" id="description" rows="5" cols="40" required><%= formData.description || '' %></textarea>
+
+        <!-- Performers -->
+        <label for="performers">Performers:</label>
+        <input type="text" name="performers" id="performers" placeholder="Comma-separated" value="<%= formData.performers.join(', ') %>" />
+
+        <!-- Booking Phone -->
+        <label for="bookingPhoneNumber">Booking Phone Number:</label>
+        <input type="tel" name="bookingPhoneNumber" id="bookingPhoneNumber" required value="<%= formData.bookingPhoneNumber || '' %>" />
+
+        <!-- Price -->
+        <label for="price">Price:</label>
+        <input type="number" name="price" id="price" min="1" value="<%= formData.price || '' %>" />
+
+        <!-- Ticket Quantity -->
+        <label for="ticketQuantity">Ticket Quantity:</label>
+        <input type="number" name="ticketQuantity" id="ticketQuantity" min="1" value="<%= formData.ticketQuantity || '' %>" />
+
+        <!-- Submit -->
+        <button type="submit">Update Event</button>
+    </form>
+</body>
+</html>
