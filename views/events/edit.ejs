@@ -58,7 +58,9 @@
 
         <!-- Performers -->
         <label for="performers">Performers:</label>
-        <input type="text" name="performers" id="performers" placeholder="Comma-separated" value="<%= formData.performers.join(', ') %>" />
+        <input type="text" name="performers" id="performers" placeholder="Comma-separated" value="<%= Array.isArray(formData.performers) 
+                 ? formData.performers.join(', ') 
+                 : (formData.performers || '') %>" />
 
         <!-- Booking Phone -->
         <label for="bookingPhoneNumber">Booking Phone Number:</label>

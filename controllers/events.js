@@ -194,14 +194,16 @@ router.get('/:eventId/edit', async (req, res) => {
 // update event route
 router.put('/:eventId', async (req, res) => {
   try {
+    // Get the event by ID from the URL
     const event = await Event.findById(req.params.eventId);
     if (!event) return res.redirect('/events');
 
+    // Check ownership
     if (!event.owner.equals(req.session.user._id)) {
       return res.redirect(`/events/${event._id}`);
     }
 
-    const times = generateTimes(); // for re-rendering
+    const times = generateTimes(); // for re-rendering in case of validation error
 
     const now = new Date();
     const eventDate = new Date(req.body.eventDate);
@@ -217,13 +219,13 @@ router.put('/:eventId', async (req, res) => {
     ) {
       return res.render('events/edit.ejs', {
         event,
-        formData: req.body,
+        formData: { ...req.body, _id: req.params.eventId },
         times,
         error: 'Event date cannot be the same or in the past.'
       });
     }
 
-    // Parse time helper
+    // Parse 12h AM/PM time string into Date object
     function parseTime(dateStr, timeStr) {
       const [time, period] = timeStr.split(' ');
       let [hours, minutes] = time.split(':').map(Number);
@@ -240,7 +242,7 @@ router.put('/:eventId', async (req, res) => {
     if (endDateTime <= startDateTime) {
       return res.render('events/edit.ejs', {
         event,
-        formData: req.body,
+        formData: { ...req.body, _id: req.params.eventId },
         times,
         error: 'End time must be later than start time.'
       });
@@ -251,7 +253,7 @@ router.put('/:eventId', async (req, res) => {
       if (!req.body.performers.includes(',')) {
         return res.render('events/edit.ejs', {
           event,
-          formData: req.body,
+          formData: { ...req.body, _id: req.params.eventId },
           times,
           error: 'Performers must be separated by commas.'
         });
@@ -259,14 +261,17 @@ router.put('/:eventId', async (req, res) => {
       req.body.performers = req.body.performers.split(',').map(p => p.trim());
     }
 
-    await Event.findByIdAndUpdate(req.params.eventId, req.body, { new: true });
+    // Perform the update
+    await event.updateOne(req.body);
+
+    // Redirect to the event page
     res.redirect(`/events/${req.params.eventId}`);
   } catch (err) {
     console.error(err);
     const times = generateTimes();
     res.render('events/edit.ejs', {
       event: req.body,
-      formData: req.body,
+      formData: { ...req.body, _id: req.params.eventId },
       times,
       error: 'There was an error updating the event.'
     });
