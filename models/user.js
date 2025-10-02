@@ -1,5 +1,27 @@
 const mongoose = require('mongoose');
 
+const bookingSchema = new mongoose.Schema({
+  event: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Event',
+    required: true,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 1,
+  },
+  totalPaid: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -24,12 +46,7 @@ const userSchema = new mongoose.Schema({
       ref: 'Event',
     },
   ],
-  bookings: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Event',
-    },
-  ],
+  bookings: [bookingSchema], // Embedded bookings
   
 });
 

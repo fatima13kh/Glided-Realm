@@ -122,7 +122,7 @@ router.post('/', async (req, res) => {
 
 router.get('/:eventId', async (req, res) => {
   try {
-   const event = await Event.findById(req.params.eventId).populate('owner');
+   const event = await Event.findById(req.params.eventId).populate('owner').populate('attendees');
     if (!event) return res.redirect('/events');
 
     let userHasFavorited = false;
@@ -138,9 +138,8 @@ router.get('/:eventId', async (req, res) => {
     res.render('events/show.ejs', {
       event,
       userHasFavorited,
-      favouritedCount
-  
-      
+      favouritedCount,
+      bookingMessage: null
     });
   } catch (error) {
     console.log(error);
@@ -306,6 +305,76 @@ router.put('/:eventId', async (req, res) => {
   }
 });
 
+// book event route 
+// book tickets for an event
+router.post('/:eventId/book', async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.eventId);
+    if (!event) return res.redirect('/events');
+
+    // check if user is signed in
+    if (!req.session.user) {
+      return res.redirect('/auth/sign-in'); // redirect to sign in
+    }
+
+    const user = await User.findById(req.session.user._id);
+
+    // prevent owner from booking
+    if (event.owner.equals(user._id)) {
+      return res.redirect(`/events/${event._id}`);
+    }
+
+    const quantity = parseInt(req.body.quantity);
+    if (!quantity || quantity < 1) {
+      return res.redirect(`/events/${event._id}`);
+    }
+
+    const totalPrice = event.price * quantity;
+
+    // reduce available tickets
+    event.ticketQuantity -= quantity;
+
+    // store bookings per user
+    if (!event.attendees) event.attendees = [];
+
+    // check if user already booked this event
+    const existingBooking = event.attendees.find(a => a.user.equals(user._id));
+    if (existingBooking) {
+      existingBooking.quantity += quantity;
+      existingBooking.totalPaid += totalPrice;
+    } else {
+      event.attendees.push({
+        user: user._id,
+        quantity,
+        totalPaid: totalPrice
+      });
+    }
+
+    // add to user's bookings (can track multiple times too)
+    if (!user.bookings) user.bookings = [];
+    user.bookings.push({
+      event: event._id,
+      quantity,
+      totalPaid: totalPrice,
+      date: new Date()
+    });
+
+    await event.save();
+    await user.save();
+
+    res.render('events/show.ejs', {
+      event: await Event.findById(event._id).populate('owner').populate('attendees.user', 'username'),
+      user,
+      userHasFavorited: user.favourites.includes(event._id),
+      favouritedCount: await User.countDocuments({ favourites: event._id }),
+      bookingMessage: `You successfully booked ${quantity} ticket(s) for ${totalPrice.toFixed(3)} BHD`
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.redirect('/');
+  }
+});
 
 
 
