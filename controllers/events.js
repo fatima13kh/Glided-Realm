@@ -21,7 +21,8 @@ function generateTimes() {
 
 router.get('/', async (req, res) => {
   try {
-    const populatedEvents = await Event.find({}).populate('owner');
+      // Only fetch events where ticketQuantity > 0
+    const populatedEvents = await Event.find({ ticketQuantity: { $gt: 0 } }).populate('owner');
 
     res.render('events/index.ejs', {
       events: populatedEvents,
@@ -94,16 +95,27 @@ router.post('/', async (req, res) => {
         }
 
         // Convert performers to array if needed
-        if (typeof req.body.performers === 'string') {
-            if (!req.body.performers.includes(',')) {
-                return res.render('events/new.ejs', {
-                error: 'Performers must be separated by commas.',
-                formData: req.body,
-                times
-            });
+if (typeof req.body.performers === 'string') {
+    const performersStr = req.body.performers.trim();
+
+    if (performersStr.includes(',')) {
+        // Multiple performers separated by commas → split into array
+        req.body.performers = performersStr.split(',').map(p => p.trim());
+    } else {
+        // Single performer → allowed
+        req.body.performers = [performersStr];
     }
-            req.body.performers = req.body.performers.split(',').map(p => p.trim());
-        }
+
+    // Optional: catch multiple words without commas
+    if (req.body.performers.length === 1 && req.body.performers[0].includes(' ') && !performersStr.includes(',')) {
+        return res.render('events/new.ejs', {
+            error: 'Performers must be separated by commas.',
+            formData: req.body,
+            times
+        });
+    }
+}
+
 
         await Event.create(req.body);
         res.redirect('/events');
@@ -248,17 +260,28 @@ router.put('/:eventId', async (req, res) => {
     }
 
     // Convert performers to array if needed
-    if (typeof req.body.performers === 'string') {
-      if (!req.body.performers.includes(',')) {
-        return res.render('events/edit.ejs', {
-          event,
-          formData: { ...req.body, _id: req.params.eventId },
-          times,
-          error: 'Performers must be separated by commas.'
-        });
-      }
-      req.body.performers = req.body.performers.split(',').map(p => p.trim());
+if (typeof req.body.performers === 'string') {
+    const performersStr = req.body.performers.trim();
+
+    if (performersStr.includes(',')) {
+        // Multiple performers separated by commas → split into array
+        req.body.performers = performersStr.split(',').map(p => p.trim());
+    } else {
+        // Single performer → allowed
+        req.body.performers = [performersStr];
     }
+
+    // catch multiple words without commas
+    if (req.body.performers.length === 1 && req.body.performers[0].includes(' ') && !performersStr.includes(',')) {
+        return res.render('events/edit.ejs', {
+            event,
+            formData: { ...req.body, _id: req.params.eventId },
+            times,
+            error: 'Performers must be separated by commas.'
+        });
+    }
+}
+
 
     // Perform the update
     await event.updateOne(req.body);
@@ -306,27 +329,46 @@ router.put('/:eventId', async (req, res) => {
 });
 
 // book event route 
-// book tickets for an event
 router.post('/:eventId/book', async (req, res) => {
   try {
-    const event = await Event.findById(req.params.eventId);
+    const event = await Event.findById(req.params.eventId).populate('owner').populate('attendees.user', 'username');
     if (!event) return res.redirect('/events');
 
     // check if user is signed in
     if (!req.session.user) {
-      return res.redirect('/auth/sign-in'); // redirect to sign in
+      return res.redirect('/auth/sign-in');
     }
 
     const user = await User.findById(req.session.user._id);
 
-    // prevent owner from booking
-    if (event.owner.equals(user._id)) {
+    // prevent owner from booking their own event
+    if (event.owner._id.equals(user._id)) {
       return res.redirect(`/events/${event._id}`);
     }
 
+    // parse quantity
     const quantity = parseInt(req.body.quantity);
     if (!quantity || quantity < 1) {
-      return res.redirect(`/events/${event._id}`);
+      return res.render('events/show.ejs', {
+        event,
+        user,
+        userHasFavorited: user.favourites.includes(event._id),
+        favouritedCount: await User.countDocuments({ favourites: event._id }),
+        bookingMessage: 'Please enter a valid number of tickets.',
+        bookingMessageColor: 'red'
+      });
+    }
+
+    // check ticket availability
+    if (quantity > event.ticketQuantity) {
+      return res.render('events/show.ejs', {
+        event,
+        user,
+        userHasFavorited: user.favourites.includes(event._id),
+        favouritedCount: await User.countDocuments({ favourites: event._id }),
+        bookingMessage: `Cannot Complete Booking Process. Not enough tickets available. Only ${event.ticketQuantity} left.`,
+        bookingMessageColor: 'red'
+      });
     }
 
     const totalPrice = event.price * quantity;
@@ -334,14 +376,12 @@ router.post('/:eventId/book', async (req, res) => {
     // reduce available tickets
     event.ticketQuantity -= quantity;
 
-    // store bookings per user
+    // update attendees
     if (!event.attendees) event.attendees = [];
-
-    // check if user already booked this event
-    const existingBooking = event.attendees.find(a => a.user.equals(user._id));
-    if (existingBooking) {
-      existingBooking.quantity += quantity;
-      existingBooking.totalPaid += totalPrice;
+    const existingAttendee = event.attendees.find(a => a.user._id.equals(user._id));
+    if (existingAttendee) {
+      existingAttendee.quantity += quantity;
+      existingAttendee.totalPaid += totalPrice;
     } else {
       event.attendees.push({
         user: user._id,
@@ -350,7 +390,7 @@ router.post('/:eventId/book', async (req, res) => {
       });
     }
 
-    // add to user's bookings (can track multiple times too)
+    // update user bookings (embedded)
     if (!user.bookings) user.bookings = [];
     user.bookings.push({
       event: event._id,
@@ -362,12 +402,21 @@ router.post('/:eventId/book', async (req, res) => {
     await event.save();
     await user.save();
 
+    // re-fetch event to populate attendee usernames for rendering
+    const populatedEvent = await Event.findById(event._id)
+      .populate('owner')
+      .populate('attendees.user', 'username');
+
+    res.set('Refresh', `3; url=/users/${user._id}`); // redirect to profile after 3 seconds
+
+    // render with success message
     res.render('events/show.ejs', {
-      event: await Event.findById(event._id).populate('owner').populate('attendees.user', 'username'),
+      event: populatedEvent,
       user,
       userHasFavorited: user.favourites.includes(event._id),
       favouritedCount: await User.countDocuments({ favourites: event._id }),
-      bookingMessage: `You successfully booked ${quantity} ticket(s) for ${totalPrice.toFixed(3)} BHD`
+      bookingMessage: `You successfully booked ${quantity} ticket(s) for ${totalPrice.toFixed(2)} BHD`,
+      bookingMessageColor: 'green'
     });
 
   } catch (err) {

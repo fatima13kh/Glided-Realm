@@ -64,24 +64,35 @@
 <% } else { %>
   <p>Event Owner: <%= event.owner.username %></p>
 
-  <!-- Booking Form -->
+<!-- Booking Form -->
 <h3>Book Tickets</h3>
 
 <% if (bookingMessage) { %>
-  <p style="color:green;"><%= bookingMessage %></p>
+  <p style="color: <%= bookingMessageColor || 'green' %>;">
+    <%= bookingMessage %>
+  </p>
 <% } %>
 
-<form action="/events/<%= event._id %>/book" method="POST">
-  <label for="quantity">Number of Tickets:</label>
-  <input type="number" name="quantity" id="quantity" min="1" placeholder="Enter how many tickets you want" required>
-  <button type="submit">
-    <% if (user) { %>
+<% if (event.ticketQuantity > 0) { %>
+  <form action="/events/<%= event._id %>/book" method="POST">
+    <label for="quantity">Number of Tickets:</label>
+    <input 
+      type="number" 
+      name="quantity" 
+      id="quantity" 
+      min="1" 
+      placeholder="Enter how many tickets you want" 
+      required
+    >
+    <button type="submit">
       Book Tickets
-    <% } else { %>
-      Sign in to Book
-    <% } %>
-  </button>
-</form>
+    </button>
+  </form>
+<% } else { %>
+  <p style="color:red;">Tickets are sold out.</p>
+<% } %>
+
+
 
 <% } %>
 
