@@ -14,7 +14,8 @@
     <form action="/events/<%= formData._id %>?_method=PUT" method="POST">
         <!-- Title -->
         <label for="title">Title:</label>
-        <input type="text" name="title" id="title" required value="<%= formData.title || '' %>" />
+        <input type="text" name="title" id="title" required pattern=".{3,}" 
+    title="Title must be at least 3 characters long" value="<%= formData.title || '' %>" />
 
         <!-- Type -->
         <label for="type">Type:</label>
@@ -64,7 +65,8 @@
 
         <!-- Booking Phone -->
         <label for="bookingPhoneNumber">Booking Phone Number:</label>
-        <input type="tel" name="bookingPhoneNumber" id="bookingPhoneNumber" required value="<%= formData.bookingPhoneNumber || '' %>" />
+        <input type="tel" name="bookingPhoneNumber" id="bookingPhoneNumber" required pattern="[0-9]{8,10}" 
+    title="Phone number must be 8 to 10 digits" value="<%= formData.bookingPhoneNumber || '' %>" />
 
         <!-- Price -->
         <label for="price">Price:</label>

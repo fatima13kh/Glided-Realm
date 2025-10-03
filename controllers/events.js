@@ -55,6 +55,14 @@ router.post('/', async (req, res) => {
         // Convert eventDate to Date object
         const eventDate = new Date(req.body.eventDate);
 
+        // Validate title
+if (!req.body.title || req.body.title.trim().length < 3) {
+    return res.render('events/new.ejs', {  // or edit.ejs
+        error: 'Title must be at least 3 characters long.',
+        formData: req.body,
+        times
+    });
+}
         // Validate eventDate is in the future
         if (
             eventDate.getFullYear() < now.getFullYear() ||
@@ -116,6 +124,16 @@ if (typeof req.body.performers === 'string') {
     }
 }
 
+const phone = req.body.bookingPhoneNumber;
+if (!/^\d{8,10}$/.test(phone)) {
+    return res.render('events/new.ejs', {
+        error: 'Phone number must be between 8 and 10 digits.',
+        formData: req.body,
+        times
+    });
+}
+
+
 
         await Event.create(req.body);
         res.redirect('/events');
@@ -173,7 +191,7 @@ router.delete('/:eventId', async (req, res) => {
       ? await User.findById(req.session.user._id)
       : null;
 
-    // ✅ compute real favourites info
+    // compute real favourites info
     const favouritedCount = await User.countDocuments({ favourites: event._id });
     const userHasFavorited = currentUser
       ? currentUser.favourites.some(fav => fav.equals(event._id))
@@ -256,6 +274,16 @@ router.put('/:eventId', async (req, res) => {
     const now = new Date();
     const eventDate = new Date(req.body.eventDate);
 
+    if (!req.body.title || req.body.title.trim().length < 3) {
+    return res.render('events/edit.ejs', {
+        event,
+        formData: { ...req.body, _id: req.params.eventId },
+        times,
+        error: 'Title must be at least 3 characters long.'
+    });
+}
+
+
     // Validate event date
     if (
       eventDate.getFullYear() < now.getFullYear() ||
@@ -317,6 +345,17 @@ if (typeof req.body.performers === 'string') {
             error: 'Performers must be separated by commas.'
         });
     }
+}
+
+
+const phone = req.body.bookingPhoneNumber;
+if (!/^\d{8,10}$/.test(phone)) {
+    return res.render('events/edit.ejs', {
+        event,
+        formData: { ...req.body, _id: req.params.eventId },
+        times,
+        error: 'Phone number must be between 8 and 10 digits.'
+    });
 }
 
 
