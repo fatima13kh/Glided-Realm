@@ -1,0 +1,31 @@
+<h1>Edit Profile</h1>
+
+<% if (errors && errors.length > 0) { %>
+  <ul style="color:red;">
+    <% errors.forEach(error => { %>
+      <li><%= error %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<form action="/users/<%= formData._id %>/edit" method="POST">
+  <label for="username">Username:</label>
+  <input type="text" name="username" id="username" required
+         value="<%= formData.username %>"/>
+
+  <label for="email">Email:</label>
+  <input type="email" name="email" id="email" required
+         value="<%= formData.email %>"/>
+
+  <label for="phoneNumber">Phone Number:</label>
+  <input type="tel" name="phoneNumber" id="phoneNumber" required
+         value="<%= formData.phoneNumber %>"/>
+
+  <label for="password">New Password (optional):</label>
+  <input type="password" name="password" id="password"/>
+
+  <label for="confirmPassword">Confirm New Password:</label>
+  <input type="password" name="confirmPassword" id="confirmPassword"/>
+
+  <button type="submit">Save Changes</button>
+</form>

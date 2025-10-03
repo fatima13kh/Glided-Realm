@@ -7,21 +7,60 @@
   </head>
   <body>
     <h1>Create a new account!</h1>
+
+    <!-- Display validation errors -->
+    <% if (errors && errors.length > 0) { %>
+      <ul style="color:red;">
+        <% errors.forEach(error => { %>
+          <li><%= error %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+
     <form action="/auth/sign-up" method="POST">
       <label for="username">Username:</label>
-      <input type="text" name="username" id="username" />
+      <input 
+        type="text" 
+        name="username" 
+        id="username" 
+        required 
+        value="<%= formData ? formData.username : '' %>"
+      />
 
       <label for="password">Password:</label>
-      <input type="password" name="password" id="password" />
+      <input 
+        type="password" 
+        name="password" 
+        id="password" 
+        required
+      />
 
       <label for="confirmPassword">Confirm Password:</label>
-      <input type="password" name="confirmPassword" id="confirmPassword" />
+      <input 
+        type="password" 
+        name="confirmPassword" 
+        id="confirmPassword" 
+        required
+      />
 
       <label for="email">Email:</label>
-      <input type="email" name="email" id="email" />
+      <input 
+        type="email" 
+        name="email" 
+        id="email" 
+        required 
+        value="<%= formData ? formData.email : '' %>"
+      />
 
-      <label for="phoneNumber">Phone Number:</label>
-      <input type="tel" name="phoneNumber" id="phoneNumber" />
+      <label for="phone">Phone Number:</label>
+      <input 
+        type="tel" 
+        name="phoneNumber" 
+        id="phone" 
+        required 
+        value="<%= formData ? formData.phoneNumber : '' %>"
+      />
+
       <button type="submit">Sign up</button>
     </form>
   </body>

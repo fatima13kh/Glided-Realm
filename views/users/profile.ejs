@@ -4,12 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= profileUser.username %>'s Profile</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        h2 { margin-top: 30px; }
+        ul { list-style: disc; margin-left: 20px; }
+        button { margin-top: 10px; padding: 5px 10px; cursor: pointer; }
+    </style>
 </head>
 <body>
     <%- include('../partials/_navbar.ejs') %>
-    
+
     <h1><%= profileUser.username %>'s Profile</h1>
 
+    <!-- User details -->
+    <div>
+        <p><strong>Username:</strong> <%= profileUser.username %></p>
+        <p><strong>Email:</strong> <%= profileUser.email %></p>
+        <p><strong>Phone:</strong> <%= profileUser.phoneNumber %></p>
+        <a href="/users/<%= profileUser._id %>/edit"><button>Edit Profile</button></a>
+    </div>
+
+    <!-- Posted Events -->
     <h2>Posted Events</h2>
     <% if (postedEvents.length > 0) { %>
         <ul>
@@ -21,6 +36,7 @@
         <p>No events posted yet.</p>
     <% } %>
 
+    <!-- Favourite Events -->
     <h2>Favourite Events</h2>
     <% if (favouriteEvents.length > 0) { %>
         <ul>
@@ -32,6 +48,7 @@
         <p>No favourite events yet.</p>
     <% } %>
 
+    <!-- Booked Events -->
     <h2>Booked Events</h2>
     <% if (bookedEvents.length > 0) { %>
         <ul>
@@ -42,5 +59,6 @@
     <% } else { %>
         <p>No booked events yet.</p>
     <% } %>
+
 </body>
 </html>
