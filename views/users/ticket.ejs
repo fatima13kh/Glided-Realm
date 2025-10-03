@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Ticket - <%= event.title %></title>
+</head>
+<body>
+  <%- include('../partials/_navbar.ejs') %>
+
+  <h1>Ticket for <%= event.title %></h1>
+
+  <!-- Ticket info -->
+  <p>Title: <%= event.title %></p>
+  <p>Type: <%= event.type %></p>
+  <p>Owner: <%= event.owner.username %></p>
+  <p>Date: <%= event.eventDate.toDateString() %></p>
+  <p>Start Time: <%= event.startTime %></p>
+  <p>End Time: <%= event.endTime %></p>
+  <strong>Your Booking</strong><br>
+  <p>Total Tickets Booked: <%= totalTickets %></p>
+  <p>Total Paid: <%= totalPaid.toFixed(3) %> BHD</p>
+
+  <!-- Event info -->
+  <h2>Event Details</h2>
+  <p>Title: <%= event.title %></p>
+  <p>Type: <%= event.type %></p>
+  <p>Owner: <%= event.owner.username %></p>
+  <p>Date: <%= event.eventDate.toDateString() %></p>
+  <p>Start Time: <%= event.startTime %></p>
+  <p>End Time: <%= event.endTime %></p>
+  <p>Location: <%= event.location %></p>
+  <p>Description: <%= event.description %></p>
+  <p>Performers: <%= event.performers.join(', ') %></p>
+
+</body>
+</html>

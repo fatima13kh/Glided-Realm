@@ -5,9 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= profileUser.username %>'s Profile</title>
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; }
-        h2 { margin-top: 30px; }
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        h1, h2 { margin-top: 30px; }
         ul { list-style: disc; margin-left: 20px; }
+        li { margin-bottom: 10px; }
+        button { margin-top: 10px; padding: 5px 10px; cursor: pointer; }
+    </style>
+</head><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= profileUser.username %>'s Profile</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        h1, h2 { margin-top: 30px; }
+        ul { list-style: disc; margin-left: 20px; }
+        li { margin-bottom: 10px; }
         button { margin-top: 10px; padding: 5px 10px; cursor: pointer; }
     </style>
 </head>
@@ -50,10 +64,41 @@
 
     <!-- Booked Events -->
     <h2>Booked Events</h2>
-    <% if (bookedEvents.length > 0) { %>
+    <% if (bookedEvents && bookedEvents.length > 0) { %>
         <ul>
-            <% bookedEvents.forEach(event => { %>
-                <li><a href="/events/<%= event._id %>"><%= event.title %></a></li>
+            <% 
+                // Aggregate bookings by event
+                const eventBookings = {};
+                bookedEvents.forEach(event => {
+                    event.attendees.forEach(att => {
+                        if (att.user._id.toString() === profileUser._id.toString()) {
+                            if (!eventBookings[event._id]) {
+                                eventBookings[event._id] = {
+                                    event,
+                                    totalTickets: 0,
+                                    totalPaid: 0,
+                                };
+                            }
+                            eventBookings[event._id].totalTickets += att.quantity;
+                            eventBookings[event._id].totalPaid += att.totalPaid;
+                        }
+                    });
+                });
+
+                Object.values(eventBookings).forEach(eb => {
+            %>
+                <li>
+                    <strong>Event:</strong> <a href="/users/<%= profileUser._id %>/tickets/<%= eb.event._id %>"><%= eb.event.title %></a><br>
+                    <strong>Type:</strong> <%= eb.event.type %><br>
+                    <strong>Event Owner:</strong> <%= eb.event.owner.username %><br>
+                    <strong>Date:</strong> <%= eb.event.eventDate.toDateString() %><br>
+                    <strong>Start Time:</strong> <%= eb.event.startTime %><br>
+                    <strong>End Time:</strong> <%= eb.event.endTime %><br>
+                    <strong>Location:</strong> <%= eb.event.location %><br>
+                    <strong>Your Booking</strong><br>
+                    Total Tickets Booked: <%= eb.totalTickets %><br>
+                    Total Paid: BHD <%= eb.totalPaid.toFixed(3) %>
+                </li>
             <% }) %>
         </ul>
     <% } else { %>

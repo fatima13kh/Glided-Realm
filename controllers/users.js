@@ -8,19 +8,22 @@ const Event = require('../models/event');
 router.get('/:userId', async (req, res) => {
   try {
     const profileUser = await User.findById(req.params.userId)
-      .select('-password') // exclude password
-      .populate('favourites bookings');
+      .select('-password')
+      .populate('favourites bookings.event'); // populate bookings' event
 
     if (!profileUser) return res.redirect('/');
 
-    // Fetch events posted by the user
+    // Posted events
     const postedEvents = await Event.find({ owner: profileUser._id });
 
-    // Favourite events (already populated)
+    // Favourite events
     const favouriteEvents = await Event.find({ _id: { $in: profileUser.favourites } });
 
-    // Booked events (if bookings stored in User schema)
-    const bookedEvents = await Event.find({ _id: { $in: profileUser.bookings } });
+    // Booked events: get unique event IDs from bookings
+    const bookedEventIds = profileUser.bookings.map(b => b.event);
+    const bookedEvents = await Event.find({ _id: { $in: bookedEventIds } })
+      .populate('owner')
+      .populate('attendees.user');
 
     res.render('users/profile.ejs', {
       profileUser,
@@ -33,6 +36,7 @@ router.get('/:userId', async (req, res) => {
     res.redirect('/');
   }
 });
+
 
 
 // Edit profile route
@@ -124,6 +128,42 @@ router.post('/:userId/edit', async (req, res) => {
     res.redirect('/');
   }
 });
+
+// display a signle ticket with event details
+router.get('/:userId/tickets/:eventId', async (req, res) => {
+  try {
+    const { userId, eventId } = req.params;
+
+    // Fetch user
+    const user = await User.findById(userId).populate('bookings.event');
+    if (!user) return res.redirect('/');
+
+    // Filter bookings for this event and calculate totals
+    const userBookingsForEvent = user.bookings.filter(
+      booking => booking.event._id.toString() === eventId
+    );
+
+    if (userBookingsForEvent.length === 0) return res.redirect(`/users/${userId}`);
+
+    const totalTickets = userBookingsForEvent.reduce((sum, b) => sum + b.quantity, 0);
+    const totalPaid = userBookingsForEvent.reduce((sum, b) => sum + b.totalPaid, 0);
+
+    // Fetch full event details
+    const event = await Event.findById(eventId).populate('owner');
+
+    res.render('users/ticket.ejs', {
+      user,
+      event,
+      totalTickets,
+      totalPaid,
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.redirect(`/users/${req.params.userId}`);
+  }
+});
+
 
 
 
