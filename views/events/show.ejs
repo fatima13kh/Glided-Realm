@@ -41,10 +41,17 @@
     <button type="submit">Edit this event</button>
   </form>
 
+
   <!-- Delete Button -->
   <form action="/events/<%= event._id %>?_method=DELETE" method="POST">
     <button type="submit">Delete this event</button>
   </form>
+
+   <% if (bookingMessage) { %>
+  <p style="color: <%= bookingMessageColor || 'green' %>;">
+    <%= bookingMessage %>
+  </p>
+<% } %>
 
     <!-- Attendees List -->
   <h3>Attendees (<%= event.attendees.length %>)</h3>

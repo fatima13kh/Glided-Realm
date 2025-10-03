@@ -161,21 +161,58 @@ router.get('/:eventId', async (req, res) => {
 
   
 //delete event route
-
 router.delete('/:eventId', async (req, res) => {
   try {
-    const event = await Event.findById(req.params.eventId);
-    if (event.owner.equals(req.session.user._id)) {
-      await event.deleteOne();
-      res.redirect('/events');
-    } else {
-      res.send("You don't have permission to do that.");
+    const event = await Event.findById(req.params.eventId)
+      .populate('owner')
+      .populate('attendees.user', 'username');
+
+    if (!event) return res.redirect('/events');
+
+    const currentUser = req.session.user
+      ? await User.findById(req.session.user._id)
+      : null;
+
+    // ✅ compute real favourites info
+    const favouritedCount = await User.countDocuments({ favourites: event._id });
+    const userHasFavorited = currentUser
+      ? currentUser.favourites.some(fav => fav.equals(event._id))
+      : false;
+
+    // Ownership check
+    if (!currentUser || !event.owner._id.equals(currentUser._id)) {
+      return res.render('events/show.ejs', {
+        event,
+        user: currentUser,
+        favouritedCount,
+        userHasFavorited,
+        bookingMessage: "You don't have permission to delete this event.",
+        bookingMessageColor: 'red'
+      });
     }
+
+    // Prevent deletion if tickets have been booked
+    if (event.attendees && event.attendees.length > 0) {
+      return res.render('events/show.ejs', {
+        event,
+        user: currentUser,
+        favouritedCount,
+        userHasFavorited,
+        bookingMessage: "You cannot delete this event because tickets have already been booked!",
+        bookingMessageColor: 'red'
+      });
+    }
+
+    // Delete event
+    await event.deleteOne();
+    return res.redirect('/events');
+
   } catch (error) {
     console.error(error);
-    res.redirect('/');
+    return res.redirect('/');
   }
 });
+
 
 // edit event route
 router.get('/:eventId/edit', async (req, res) => {
