@@ -8,15 +8,18 @@
   <body>
     <%- include('../partials/_navbar.ejs') %>
 
-    <h1>A event in <%= event.city %></h1>
+    <h1><%= event.title %></h1>
 
-    <h2>Details</h2>
+    <strong>Details</strong><br>
+    <p>Type: <%= event.type %></p>
    <p>Event Date: <%= event.eventDate.getFullYear() %>-<%= (event.eventDate.getMonth()+1).toString().padStart(2,'0') %>-<%= event.eventDate.getDate().toString().padStart(2,'0') %></p>
-    <p>Start Time: <%= event.startTime %></p>
-    <p>End Time: <%= event.endTime %></p>
+    <p>Time: <%= event.startTime %> - <%= event.endTime %></p>
     <p>Location: <%= event.location %></p>
     <p>Description: <%= event.description %></p>
     <p>Performers: <%= event.performers.join(', ') %></p>
+    <p>Tickets Available: <%= event.ticketQuantity %></p>
+    <p>Ticket Price: <%= event.price.toFixed(2) %> BHD</p>
+    <p>Event Host: <%= event.owner.username %></p>
 
 
     <h2>Favourites</h2>

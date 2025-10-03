@@ -12,8 +12,14 @@
 <ul>
   <% events.forEach((event) => { %>
   <li>
-    An event titled "<%= event.title %>" of type "<%= event.type %>".
-    <a href="/events/<%= event._id %>">View more details.</a>
+    <strong>"<%= event.title %>"</strong><br>
+    <strong>Type:</strong> <%= event.type %><br>
+                    <strong>Event Owner:</strong> <%= event.owner.username %><br>
+                    <strong>Date:</strong> <%= event.eventDate.toDateString() %><br>
+                    <strong>Start Time:</strong> <%= event.startTime %><br>
+                    <strong>End Time:</strong> <%= event.endTime %><br>
+                    <strong>Location:</strong> <%= event.location %><br>
+    <a href="/events/<%= event._id %>">View more details.</a><br><br>
   </li>
   <% }) %>
 </ul>
