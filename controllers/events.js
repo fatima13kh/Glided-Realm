@@ -19,19 +19,41 @@ function generateTimes() {
     return times;
 }
 
+// show all events 
 router.get('/', async (req, res) => {
   try {
-      // Only fetch events where ticketQuantity > 0
-    const populatedEvents = await Event.find({ ticketQuantity: { $gt: 0 } }).populate('owner');
+    const events = await Event.find({ ticketQuantity: { $gt: 0 } }).populate('owner');
 
     res.render('events/index.ejs', {
-      events: populatedEvents,
+      events,
+      category: 'All Events',
+      user: req.session.user
     });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.error(err);
     res.redirect('/');
   }
 });
+
+// show events filtered by category
+// Category-specific events
+router.get('/category/:category', async (req, res) => {
+  try {
+    const category = req.params.category;
+    const events = await Event.find({ type: category, ticketQuantity: { $gt: 0 } }).populate('owner');
+
+    res.render('events/index.ejs', {
+      events,
+      category
+    });
+  } catch (err) {
+    console.error(err);
+    res.redirect('/events');
+  }
+});
+
+
+
 
 router.get('/new', (req, res) => {
     //generate time options for startTime and endTime

@@ -3,28 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Events</title>
+    <title><%= category %></title>
 </head>
 <body>
    <%- include('../partials/_navbar.ejs') %>
-    <h1>All Events</h1>
 
-<ul>
-  <% events.forEach((event) => { %>
-  <li>
-    <strong>"<%= event.title %>"</strong><br>
-    <strong>Type:</strong> <%= event.type %><br>
+    <h1><%= category %></h1>
+
+    <% if (events.length > 0) { %>
+        <ul>
+            <% events.forEach((event) => { %>
+                <li>
+                    <strong>"<%= event.title %>"</strong><br>
+                    <strong>Type:</strong> <%= event.type %><br>
                     <strong>Event Owner:</strong> <%= event.owner.username %><br>
                     <strong>Date:</strong> <%= event.eventDate.toDateString() %><br>
                     <strong>Start Time:</strong> <%= event.startTime %><br>
                     <strong>End Time:</strong> <%= event.endTime %><br>
                     <strong>Location:</strong> <%= event.location %><br>
-    <a href="/events/<%= event._id %>">View more details.</a><br><br>
-  </li>
-  <% }) %>
-</ul>
+                    <strong>Tickets Available:</strong> <%= event.ticketQuantity %><br>
+                    <strong>Ticket Price:</strong> <%= event.price.toFixed(2) %> BHD<br>
+                    <a href="/events/<%= event._id %>">View more details</a><br><br>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No events found in this category.</p>
+    <% } %>
+
     <% if(user) { %>
-    <a href="/events/new">Add a New Event</a>
+        <a href="/events/new">Add a New Event</a>
     <% } %>
 </body>
 </html>
