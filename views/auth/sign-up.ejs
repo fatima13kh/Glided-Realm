@@ -4,64 +4,63 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
   </head>
   <body>
-    <h1>Create a new account!</h1>
+    <div 
+      class="auth-container" 
+      style="background-image: url('/Assets/backgroundIMG.jpg'); background-size: cover; background-position: center;"
+    >
+      <div class="auth-form-wrapper">
+        <h1>Create a new account!</h1>
 
-    <!-- Display validation errors -->
-    <% if (errors && errors.length > 0) { %>
-      <ul style="color:red;">
-        <% errors.forEach(error => { %>
-          <li><%= error %></li>
-        <% }) %>
-      </ul>
-    <% } %>
+        <% if (errors && errors.length > 0) { %>
+          <ul class="errors">
+            <% errors.forEach(error => { %>
+              <li><%= error %></li>
+            <% }) %>
+          </ul>
+        <% } %>
 
-    <form action="/auth/sign-up" method="POST">
-      <label for="username">Username:</label>
-      <input 
-        type="text" 
-        name="username" 
-        id="username" 
-        required 
-        value="<%= formData ? formData.username : '' %>"
-      />
+        <form action="/auth/sign-up" method="POST">
+          <label for="username">Username:</label>
+          <input 
+            type="text" 
+            name="username" 
+            id="username" 
+            required 
+            value="<%= formData ? formData.username : '' %>"
+          />
 
-      <label for="password">Password:</label>
-      <input 
-        type="password" 
-        name="password" 
-        id="password" 
-        required
-      />
+          <label for="password">Password:</label>
+          <input type="password" name="password" id="password" required />
 
-      <label for="confirmPassword">Confirm Password:</label>
-      <input 
-        type="password" 
-        name="confirmPassword" 
-        id="confirmPassword" 
-        required
-      />
+          <label for="confirmPassword">Confirm Password:</label>
+          <input type="password" name="confirmPassword" id="confirmPassword" required />
 
-      <label for="email">Email:</label>
-      <input 
-        type="email" 
-        name="email" 
-        id="email" 
-        required 
-        value="<%= formData ? formData.email : '' %>"
-      />
+          <label for="email">Email:</label>
+          <input 
+            type="email" 
+            name="email" 
+            id="email" 
+            required 
+            value="<%= formData ? formData.email : '' %>"
+          />
 
-      <label for="phone">Phone Number:</label>
-      <input 
-        type="tel" 
-        name="phoneNumber" 
-        id="phone" 
-        required 
-        value="<%= formData ? formData.phoneNumber : '' %>"
-      />
+          <label for="phone">Phone Number:</label>
+          <input 
+            type="tel" 
+            name="phoneNumber" 
+            id="phone" 
+            required 
+            value="<%= formData ? formData.phoneNumber : '' %>"
+          />
 
-      <button type="submit">Sign up</button>
-    </form>
+          <button type="submit">Sign up</button>
+        </form>
+
+        <a href="/auth/sign-in" class="signin-link">Already have an account? Sign In</a>
+      </div>
+    </div>
   </body>
 </html>

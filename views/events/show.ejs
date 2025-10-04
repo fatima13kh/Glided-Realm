@@ -1,113 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= event.owner.username %>'s event</title>
-  </head>
-  <body>
-    <%- include('../partials/_navbar.ejs') %>
-
-    <h1><%= event.title %></h1>
-
-    <strong>Details</strong><br>
-    <p>Type: <%= event.type %></p>
-   <p>Event Date: <%= event.eventDate.getFullYear() %>-<%= (event.eventDate.getMonth()+1).toString().padStart(2,'0') %>-<%= event.eventDate.getDate().toString().padStart(2,'0') %></p>
-    <p>Time: <%= event.startTime %> - <%= event.endTime %></p>
-    <p>Location: <%= event.location %></p>
-    <p>Description: <%= event.description %></p>
-    <p>Performers: <%= event.performers.join(', ') %></p>
-    <p>Tickets Available: <%= event.ticketQuantity %></p>
-    <p>Ticket Price: <%= event.price.toFixed(2) %> BHD</p>
-    <p>Event Host: <%= event.owner.username %></p>
-
-
-    <h2>Favourites</h2>
-<p>Favourited by <%= favouritedCount %> people.</p>
-
-<form action="/events/<%= event._id %>/favourite" method="POST">
-  <% if (user && userHasFavorited) { %>
-    <button type="submit">Unfavourite</button>
-  <% } else { %>
-    <button type="submit">Favourite</button>
-  <% } %>
-</form>
-
-
-
-<h2>Owner</h2>
-<% if (user && event.owner._id.equals(user._id)) { %>
-  <p>You own this!</p>
-
-  <!-- Edit Button -->
-  <form action="/events/<%= event._id %>/edit" method="GET" style="display:inline;">
-    <button type="submit">Edit this event</button>
-  </form>
-
-
-  <!-- Delete Button -->
-  <form action="/events/<%= event._id %>?_method=DELETE" method="POST">
-    <button type="submit">Delete this event</button>
-  </form>
-
-   <% if (bookingMessage) { %>
-  <p style="color: <%= bookingMessageColor || 'green' %>;">
-    <%= bookingMessage %>
-  </p>
-<% } %>
-
-    <!-- Attendees List -->
-  <h3>Attendees (<%= event.attendees.length %>)</h3>
-  <% if (event.attendees.length > 0) { %>
-    <ul>
-      <% event.attendees.forEach(att => { %>
-        <li>
-          <%= att.user.username %> - <%= att.quantity %> ticket(s) - Paid: <%= att.totalPaid.toFixed(3) %> BHD
-        </li>
-      <% }); %>
-    </ul>
-  <% } else { %>
-    <p>No one has booked tickets yet.</p>
-  <% } %>
-
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= event.owner.username %>'s Event</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
   
-<% } else { %>
-  <p>Event Owner: <%= event.owner.username %></p>
+</head>
+<body class="event-show-body">
+  <%- include('../partials/_navbar.ejs') %>
 
-<!-- Booking Form -->
-<h3>Book Tickets</h3>
+  <!-- Fullscreen Background Container -->
+  <div class="event-background" style="background-image: url('<%= event.backgroundImage || '/Assets/backgroundIMG.jpg' %>');">
+    <div class="event-content">
+      <h1><%= event.title %></h1>
 
-<% if (bookingMessage) { %>
-  <p style="color: <%= bookingMessageColor || 'green' %>;">
-    <%= bookingMessage %>
-  </p>
-<% } %>
+      <% if(user && event.owner._id.equals(user._id)) { %>
+        <!-- Owner view: two stacked divs -->
+        <div class="owner-section">
+          <h2>Event Details</h2>
+          <p><strong>Type:</strong> <%= event.type %></p>
+          <p><strong>Date:</strong> <%= event.eventDate.toDateString() %></p>
+          <p><strong>Time:</strong> <%= event.startTime %> - <%= event.endTime %></p>
+          <p><strong>Location:</strong> <%= event.location %></p>
+          <p><strong>Description:</strong> <%= event.description %></p>
+          <p><strong>Performers:</strong> <%= event.performers.join(', ') %></p>
+          <p><strong>Tickets Available:</strong> <%= event.ticketQuantity %></p>
+          <p><strong>Price:</strong> <%= event.price.toFixed(2) %> BHD</p>
 
-<% if (event.ticketQuantity > 0) { %>
-  <form action="/events/<%= event._id %>/book" method="POST">
-    <label for="quantity">Number of Tickets:</label>
-    <input 
-      type="number" 
-      name="quantity" 
-      id="quantity" 
-      min="1" 
-      placeholder="Enter how many tickets you want" 
-      required
-    >
-    <button type="submit">
-      Book Tickets
-    </button>
-  </form>
-<% } else { %>
-  <p style="color:red;">Tickets are sold out.</p>
-<% } %>
+    
 
+          <!-- Edit/Delete Buttons -->
+          <form action="/events/<%= event._id %>/edit" method="GET" style="display:inline-block;">
+            <button type="submit">Edit Event</button>
+          </form>
+          <form action="/events/<%= event._id %>?_method=DELETE" method="POST" style="display:inline-block;">
+            <button type="submit">Delete Event</button>
+          </form>
 
+          <% if (bookingMessage) { %>
+            <p style="color: <%= bookingMessageColor || 'green' %>;"><%= bookingMessage %></p>
+          <% } %>
+        </div>
 
-<% } %>
+        <div class="owner-section">
+          <h3>Attendees (<%= event.attendees.length %>)</h3>
+          <% if (event.attendees.length > 0) { %>
+            <ul>
+              <% event.attendees.forEach(att => { %>
+                <li><%= att.user.username %> - <%= att.quantity %> ticket(s) - Paid: <%= att.totalPaid.toFixed(3) %> BHD</li>
+              <% }) %>
+            </ul>
+          <% } else { %>
+            <p>No one has booked tickets yet.</p>
+          <% } %>
+        </div>
 
+      <% } else { %>
+        <!-- Non-owner view -->
+        <div>
+          <h2>Event Details</h2>
+          <p><strong>Type:</strong> <%= event.type %></p>
+          <p><strong>Date:</strong> <%= event.eventDate.toDateString() %></p>
+          <p><strong>Time:</strong> <%= event.startTime %> - <%= event.endTime %></p>
+          <p><strong>Location:</strong> <%= event.location %></p>
+          <p><strong>Description:</strong> <%= event.description %></p>
+          <p><strong>Performers:</strong> <%= event.performers.join(', ') %></p>
+          <p><strong>Tickets Available:</strong> <%= event.ticketQuantity %></p>
+          <p><strong>Price:</strong> <%= event.price.toFixed(2) %> BHD</p>
+          <p><strong>Event Owner:</strong> <%= event.owner.username %></p>
 
+          <!-- Booking Form -->
+          <% if (bookingMessage) { %>
+            <p style="color: <%= bookingMessageColor || 'green' %>;"><%= bookingMessage %></p>
+          <% } %>
 
+          <% if (event.ticketQuantity > 0) { %>
+            <form action="/events/<%= event._id %>/book" method="POST" class="form-group">
+              <label for="quantity">Number of Tickets:</label>
+              <input type="number" name="quantity" id="quantity" min="1" required>
+              <button type="submit">Book Tickets</button>
+            </form>
+          <% } else { %>
+            <p style="color:red;">Tickets are sold out.</p>
+          <% } %>
 
+          <!-- Favourites -->
+           <br>
+          <h3>Favourites</h3>
+          <p>Favourited by <%= favouritedCount %> people.</p>
+          <form action="/events/<%= event._id %>/favourite" method="POST">
+            <% if (user && userHasFavorited) { %>
+              <button type="submit">Unfavourite</button>
+            <% } else { %>
+              <button type="submit">Favourite</button>
+            <% } %>
+          </form>
+        </div>
+      <% } %>
+    </div>
+  </div>
 </body>
 </html>

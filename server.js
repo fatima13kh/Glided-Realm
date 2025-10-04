@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 require('./config/database.js');
 const express = require('express');
+const path = require('path');
 
 const app = express();
 
@@ -32,6 +33,8 @@ app.use(methodOverride('_method'));
 // Morgan for logging HTTP requests
 app.use(morgan('dev'));
 
+// Serve static files from the Assets directory
+app.use('/Assets', express.static(path.join(__dirname, 'Assets')));
 // Session Storage with MongoStore
 app.use(
   session({
@@ -43,6 +46,8 @@ app.use(
     }),
   })
 );
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Add user variable to all templates
 app.use(passUserToView);

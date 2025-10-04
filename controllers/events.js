@@ -3,6 +3,7 @@ const router = express.Router();
 
 const Event = require('../models/event');
 const User = require('../models/user');
+const { upload } = require('../config/cloudinary');
 
 
 function generateTimes() {
@@ -36,7 +37,6 @@ router.get('/', async (req, res) => {
 });
 
 // show events filtered by category
-// Category-specific events
 router.get('/category/:category', async (req, res) => {
   try {
     const category = req.params.category;
@@ -67,12 +67,21 @@ router.get('/new', (req, res) => {
     });
 });
 
-router.post('/', async (req, res) => {
+// create new event
+router.post('/', upload.fields([{ name: 'backgroundImage', maxCount: 1 }, { name: 'ticketImage', maxCount: 1 }]), async (req, res) => {
     const times = generateTimes(); // generate for re-rendering in case of error
     try {
         const now = new Date();
         req.body.owner = req.session.user._id;
         req.body.datePosted = new Date();
+
+        // assign uploaded image URLs
+        if (req.files['backgroundImage']) {
+          req.body.backgroundImage = req.files['backgroundImage'][0].path; 
+        }
+        if (req.files['ticketImage']) {
+          req.body.ticketImage = req.files['ticketImage'][0].path;
+        }
 
         // Convert eventDate to Date object
         const eventDate = new Date(req.body.eventDate);
@@ -255,7 +264,10 @@ router.delete('/:eventId', async (req, res) => {
 
 
 // edit event route
-router.get('/:eventId/edit', async (req, res) => {
+router.get('/:eventId/edit', upload.fields([
+    { name: 'backgroundImage', maxCount: 1 },
+    { name: 'ticketImage', maxCount: 1 }
+  ]), async (req, res) => {
   try {
     const event = await Event.findById(req.params.eventId);
     if (!event) return res.redirect('/events');
@@ -379,6 +391,19 @@ if (!/^\d{8,10}$/.test(phone)) {
         error: 'Phone number must be between 8 and 10 digits.'
     });
 }
+
+//image upload handeling 
+ if (req.files) {
+        if (req.files['backgroundImage']) {
+          const bgUpload = await cloudinary.uploader.upload(req.files['backgroundImage'][0].path);
+          req.body.backgroundImage = bgUpload.secure_url;
+        }
+        if (req.files['ticketImage']) {
+          const ticketUpload = await cloudinary.uploader.upload(req.files['ticketImage'][0].path);
+          req.body.ticketImage = ticketUpload.secure_url;
+        }
+      }
+
 
 
     // Perform the update

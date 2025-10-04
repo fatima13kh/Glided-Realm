@@ -1,0 +1,742 @@
+/* ===========================
+   GLOBAL STYLES
+   =========================== */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* ===========================
+   NAVIGATION BAR
+   =========================== */
+nav {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 15px 30px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  border-radius: 8px;
+  margin: 20px auto;
+  max-width: 1200px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 15px;
+  border-radius: 5px;
+  transition: background 0.3s, color 0.3s;
+}
+
+nav a:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+/* ===========================
+   HOME PAGE
+   =========================== */
+.home-body {
+  font-family: 'Georgia', serif;
+  margin: 0;
+  padding: 0;
+  background-color: #3D1A1A;
+  color: white;
+}
+
+.header {
+    background-image: url('/Assets/headerBKG.JPG'); /* default image */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 300px; /* adjust as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+}
+
+
+.navigation {
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-item {
+  margin: 0 15px;
+  color: white;
+  text-decoration: none;
+}
+
+.video-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.video {
+  width: auto;
+  height: auto;
+  margin-right: 0;
+}
+
+.about {
+  background-color: #B22222;
+  color: white;
+  padding: 20px;
+  margin: 0 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* ===========================
+   EVENTS INDEX PAGE
+   =========================== */
+.events-header {
+  background-image: url('/Assets/headerBKG.JPG');
+  background-size: cover;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.add-event-button {
+  display: inline-block;
+  margin: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.add-event-button:hover {
+  background-color: #0056b3;
+}
+
+.event-list {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.event-card {
+  position: relative;
+  height: 250px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-size: cover;
+  background-position: center;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.event-card:hover {
+  transform: scale(1.03);
+}
+
+.event-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0));
+}
+
+.event-overlay h2, 
+.event-overlay strong, 
+.event-overlay p {
+  margin: 5px 0;
+}
+
+/* ===========================
+   EVENT SHOW PAGE
+   =========================== */
+.event-show-body {
+  margin: 0;
+  color: white;
+}
+
+.event-background {
+  background-size: cover;
+  background-position: center;
+  min-height: calc(100vh - 60px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.event-content {
+  background-color: rgba(139, 69, 19, 0.85);
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 800px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  text-align: center;
+}
+
+.event-content h1, 
+.event-content h2, 
+.event-content h3 {
+  margin: 0 0 10px 0;
+}
+
+.event-content p, 
+.event-content li {
+  margin: 6px 0;
+  line-height: 1.5;
+}
+
+.event-content ul {
+  padding-left: 20px;
+  text-align: left;
+}
+
+.ticket-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.event-content input[type="number"] {
+  width: 70px;
+  padding: 5px;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+.event-content button {
+  padding: 7px 15px;
+  background-color: #8B4513;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.event-content button:hover {
+  background-color: #A0522D;
+}
+
+.owner-section {
+  background-color: rgba(0,0,0,0.3);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+/* ===========================
+   NEW/EDIT EVENT FORMS
+   =========================== */
+.form-page-body {
+  height: 100%;
+  background-image: url('/Assets/backgroundIMG.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.form-container,
+.edit-container {
+  background-color: rgba(0, 0, 0, 0.75);
+  padding: 40px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 1200px;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  margin: 50px auto;
+}
+
+.form-container h1,
+.edit-container h1 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.form-container form,
+.edit-container form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 30px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-container form > div,
+.edit-container form > div {
+  padding: 5px 10px;
+  box-sizing: border-box;
+}
+
+.form-container label,
+.edit-container label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-container input[type="text"],
+.form-container input[type="tel"],
+.form-container input[type="number"],
+.form-container input[type="date"],
+.form-container select,
+.form-container textarea,
+.form-container input[type="file"],
+.edit-container input[type="text"],
+.edit-container input[type="tel"],
+.edit-container input[type="number"],
+.edit-container input[type="date"],
+.edit-container select,
+.edit-container textarea,
+.edit-container input[type="file"] {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.form-container textarea,
+.edit-container textarea {
+  resize: vertical;
+}
+
+.form-container button,
+.edit-container button {
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  grid-column: 1 / -1;
+  margin-top: 10px;
+  transition: background 0.3s ease;
+}
+
+.form-container button:hover,
+.edit-container button:hover {
+  background-color: #0056b3;
+}
+
+.current-image img {
+  border-radius: 8px;
+  margin-top: 5px;
+  max-width: 150px;
+  display: block;
+}
+
+.error-message {
+  color: #ff6961;
+  text-align: center;
+  grid-column: 1 / -1;
+  margin-bottom: 15px;
+}
+
+.form-container small {
+  display: block;
+  margin-top: 4px;
+  color: #ccc;
+}
+
+.create-page-background {
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  padding: 50px 0; /* space from navbar */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Optional: form container styling */
+.create-container {
+  background: rgba(0, 0, 0, 0.6); /* dark overlay for readability */
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 700px;
+  color: white;
+}
+
+
+.edit-page-background {
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  padding: 50px 0; 
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+
+/* ===========================
+   PROFILE PAGE
+   =========================== */
+.profile-body {
+  margin: 0;
+  color: #fff;
+  background-color: #111;
+}
+
+.profile-header {
+  background-image: url('/Assets/headerBKG.JPG');
+  background-size: cover;
+  background-position: center;
+  padding: 100px 20px 50px;
+  text-align: center;
+  position: relative;
+}
+
+.profile-header h1 {
+  margin: 0;
+  font-size: 3em;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+}
+
+.profile-details {
+  background-color: rgba(0,0,0,0.6);
+  max-width: 900px;
+  margin: 40px auto 20px;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.profile-details p {
+  margin: 8px 0;
+}
+
+.profile-details button {
+  padding: 8px 15px;
+  margin-top: 10px;
+  cursor: pointer;
+  background-color: #8B4513;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.tabs {
+  max-width: 900px;
+  margin: 20px auto 50px;
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 12px;
+}
+
+.tab-buttons {
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 1px solid #fff;
+}
+
+.tab-buttons button {
+  flex: 1;
+  padding: 12px 0;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.tab-buttons button.active {
+  background-color: rgba(139,69,19,0.85);
+  border-bottom: 2px solid #fff;
+}
+
+.tab-content {
+  display: none;
+  padding: 20px;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* ===========================
+   TICKET PAGE
+   =========================== */
+.ticket-page-body {
+  margin: 0;
+  color: white;
+}
+
+.page-background {
+  background-size: cover;
+  background-position: center;
+  min-height: calc(100vh - 60px);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+/* ===== Booked Events (Ticket) Styles ===== */
+.ticket-container {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  margin: 15px auto;
+  width: 90%;              /* narrower than full tab */
+  max-width: 900px;        /* prevent being too wide on big screens */
+  text-decoration: none;   /* remove underline since it's an <a> */
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.ticket-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+/* Ticket Image */
+.ticket-image {
+  flex: 0 0 160px;
+  border-radius: 12px 0 0 12px;
+  overflow: hidden;
+  margin: 20px;
+}
+
+.ticket-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Ticket Info */
+.ticket-info {
+  padding: 15px;
+  flex: 1;
+}
+
+.ticket-info h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+
+.ticket-info h2 {
+  margin-top: 0;
+}
+
+.ticket-info p, 
+.ticket-info strong {
+  margin: 6px 0;
+  line-height: 1.5;
+}
+
+.event-info {
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+  color: white;
+}
+
+.event-info h2 {
+  margin-top: 0;
+}
+
+/* ===========================
+   AUTH PAGES (Sign In / Sign Up)
+   =========================== */
+.auth-container {
+  min-height: 100vh; /* fill the viewport */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-form-wrapper {
+  background-color: rgba(0, 0, 0, 0.6); /* semi-transparent background */
+  padding: 40px;
+  border-radius: 12px;
+  color: white;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  text-align: center;
+}
+
+.auth-form-wrapper h1 {
+  margin-bottom: 25px;
+  font-size: 2em;
+}
+
+.auth-form-wrapper form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-form-wrapper label {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.auth-form-wrapper input {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.auth-form-wrapper button {
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+.auth-form-wrapper button:hover {
+  background-color: #0056b3;
+}
+
+.errors {
+  color: #ff6961;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.signup-link,
+.signin-link {
+  margin-top: 15px;
+  display: block;
+  color: #fff;
+  text-decoration: underline;
+}
+
+.signup-link:hover,
+.signin-link:hover {
+  color: #ddd;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .auth-form-wrapper {
+    padding: 25px;
+  }
+}
+
+
+/* ===========================
+   EDIT PROFILE PAGE
+   =========================== */
+.edit-profile-container {
+  background-color: rgba(0, 0, 0, 0.75);
+  padding: 40px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  margin: 50px auto;
+}
+
+.edit-profile-container h1 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.edit-profile-container form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 30px;
+}
+
+.edit-profile-container form > div {
+  padding: 5px 10px;
+  box-sizing: border-box;
+}
+
+.edit-profile-container label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.edit-profile-container input[type="text"],
+.edit-profile-container input[type="email"],
+.edit-profile-container input[type="tel"],
+.edit-profile-container input[type="password"] {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.edit-profile-container button {
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  grid-column: 1 / -1;
+  margin-top: 10px;
+  transition: background 0.3s ease;
+}
+
+.edit-profile-container button:hover {
+  background-color: #0056b3;
+}
+
+/* ===========================
+   RESPONSIVE DESIGN
+   =========================== */
+@media (max-width: 700px) {
+  nav {
+    gap: 10px;
+    padding: 10px 15px;
+  }
+
+  .form-container form,
+  .edit-container form,
+  .edit-profile-container form {
+    grid-template-columns: 1fr;
+  }
+
+  .form-container,
+  .edit-container,
+  .edit-profile-container {
+    padding: 25px;
+  }

@@ -4,34 +4,52 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Your Ticket - <%= event.title %></title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
   <%- include('../partials/_navbar.ejs') %>
 
-  <h1>Ticket for <%= event.title %></h1>
+  <div class="page-background" 
+  style="background-image: url('<%= event.backgroundImage || "/Assets/backgroundIMG.jpg" %>'); 
+              background-size: cover; 
+              background-position: center; 
+              background-repeat: no-repeat; 
+              min-height: 100vh; 
+              padding: 20px;">
+    <!-- Ticket Div -->
+    <div class="ticket-container">
+      <!-- User ticket image on the left -->
+      <div class="ticket-image">
+        <img src="<%= event.ticketImage || '/Assets/tempTicketIMG.JPG' %>" alt="Ticket Image">
+      </div>
 
-  <!-- Ticket info -->
-  <p>Title: <%= event.title %></p>
-  <p>Type: <%= event.type %></p>
-  <p>Owner: <%= event.owner.username %></p>
-  <p>Date: <%= event.eventDate.toDateString() %></p>
-  <p>Start Time: <%= event.startTime %></p>
-  <p>End Time: <%= event.endTime %></p>
-  <strong>Your Booking</strong><br>
-  <p>Total Tickets Booked: <%= totalTickets %></p>
-  <p>Total Paid: <%= totalPaid.toFixed(3) %> BHD</p>
+      <!-- Ticket Info -->
+      <div class="ticket-info">
+        <h2>Your Ticket</h2>
+        <p><strong>Title:</strong> <%= event.title %></p>
+        <p><strong>Type:</strong> <%= event.type %></p>
+        <p><strong>Date:</strong> <%= event.eventDate.toDateString() %></p>
+        <p><strong>Time:</strong> <%= event.startTime %> - <%= event.endTime %></p>
+        <p><strong>Owner:</strong> <%= event.owner.username %></p>
 
-  <!-- Event info -->
-  <h2>Event Details</h2>
-  <p>Title: <%= event.title %></p>
-  <p>Type: <%= event.type %></p>
-  <p>Owner: <%= event.owner.username %></p>
-  <p>Date: <%= event.eventDate.toDateString() %></p>
-  <p>Start Time: <%= event.startTime %></p>
-  <p>End Time: <%= event.endTime %></p>
-  <p>Location: <%= event.location %></p>
-  <p>Description: <%= event.description %></p>
-  <p>Performers: <%= event.performers.join(', ') %></p>
+        <h3>Your Booking</h3>
+        <p>Total Tickets Booked: <%= totalTickets %></p>
+        <p>Total Paid: <%= totalPaid.toFixed(3) %> BHD</p>
+      </div>
+    </div>
 
+    <!-- Event Details Div -->
+    <div class="event-info">
+      <h2>Event Details</h2>
+      <p><strong>Title:</strong> <%= event.title %></p>
+      <p><strong>Type:</strong> <%= event.type %></p>
+      <p><strong>Date:</strong> <%= event.eventDate.toDateString() %></p>
+      <p><strong>Time:</strong> <%= event.startTime %> - <%= event.endTime %></p>
+      <p><strong>Location:</strong> <%= event.location %></p>
+      <p><strong>Description:</strong> <%= event.description %></p>
+      <p><strong>Performers:</strong> <%= event.performers.join(', ') %></p>
+       <p><strong>Owner:</strong> <%= event.owner.username %></p>
+    </div>
+  </div>
 </body>
 </html>

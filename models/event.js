@@ -53,6 +53,16 @@ const eventSchema = new mongoose.Schema({
     required: true,
     min: 1,
   },
+
+  // new image fields 
+  backgroundImage: {
+    type: String,
+    required: true,
+  },
+  ticketImage: {
+    type: String,
+    required: true,
+  },
   description: {
     type: String,
     required: true,

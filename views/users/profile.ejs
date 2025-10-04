@@ -1,109 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= profileUser.username %>'s Profile</title>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
-        h1, h2 { margin-top: 30px; }
-        ul { list-style: disc; margin-left: 20px; }
-        li { margin-bottom: 10px; }
-        button { margin-top: 10px; padding: 5px 10px; cursor: pointer; }
-    </style>
-</head><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= profileUser.username %>'s Profile</title>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
-        h1, h2 { margin-top: 30px; }
-        ul { list-style: disc; margin-left: 20px; }
-        li { margin-bottom: 10px; }
-        button { margin-top: 10px; padding: 5px 10px; cursor: pointer; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= profileUser.username %>'s Profile</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
+
     <%- include('../partials/_navbar.ejs') %>
 
-    <h1><%= profileUser.username %>'s Profile</h1>
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <h1>Profile %></h1>
+  </div>
 
-    <!-- User details -->
-    <div>
-        <p><strong>Username:</strong> <%= profileUser.username %></p>
-        <p><strong>Email:</strong> <%= profileUser.email %></p>
-        <p><strong>Phone:</strong> <%= profileUser.phoneNumber %></p>
-        <a href="/users/<%= profileUser._id %>/edit"><button>Edit Profile</button></a>
+  <!-- Profile Details -->
+  <div class="profile-details">
+    <p><strong>Username:</strong> <%= profileUser.username %></p>
+    <p><strong>Email:</strong> <%= profileUser.email %></p>
+    <p><strong>Phone:</strong> <%= profileUser.phoneNumber %></p>
+    <a href="/users/<%= profileUser._id %>/edit"><button>Edit Profile</button></a>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab-buttons">
+      <button class="active" data-tab="posted">Events Posted</button>
+      <button data-tab="favourite">Favourite Events</button>
+      <button data-tab="booked">Booked Events</button>
     </div>
 
-    <!-- Posted Events -->
-    <h2>Posted Events</h2>
-    <% if (postedEvents.length > 0) { %>
-        <ul>
-            <% postedEvents.forEach(event => { %>
-                <li><a href="/events/<%= event._id %>"><%= event.title %></a></li>
-            <% }) %>
-        </ul>
-    <% } else { %>
-        <p>No events posted yet.</p>
-    <% } %>
+    <!-- Events Posted -->
+    <div class="tab-content active" id="posted">
+      <% if (postedEvents.length > 0) { %>
+        <div class="event-list">
+          <% postedEvents.forEach(event => { %>
+            <div class="event-card" style="background-image: url('<%= event.backgroundImage ? event.backgroundImage : '/Assets/headerBKG.JPG' %>');" onclick="window.location='/events/<%= event._id %>'">
+              <div class="event-overlay">
+                <h2><%= event.title %></h2>
+                <strong>Type:</strong> <%= event.type %><br>
+                <strong>Date:</strong> <%= event.eventDate.toDateString() %><br>
+                <strong>Location:</strong> <%= event.location %><br>
+                <p><strong>Tickets:</strong> <%= event.ticketQuantity %> | <strong>Price:</strong> <%= event.price.toFixed(2) %> BHD</p>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p style="padding:20px;">No events posted yet.</p>
+      <% } %>
+    </div>
 
     <!-- Favourite Events -->
-    <h2>Favourite Events</h2>
-    <% if (favouriteEvents.length > 0) { %>
-        <ul>
-            <% favouriteEvents.forEach(event => { %>
-                <li><a href="/events/<%= event._id %>"><%= event.title %></a></li>
-            <% }) %>
-        </ul>
-    <% } else { %>
-        <p>No favourite events yet.</p>
-    <% } %>
+    <div class="tab-content" id="favourite">
+      <% if (favouriteEvents.length > 0) { %>
+        <div class="event-list">
+          <% favouriteEvents.forEach(event => { %>
+            <div class="event-card" style="background-image: url('<%= event.backgroundImage ? event.backgroundImage : '/Assets/headerBKG.JPG' %>');" onclick="window.location='/events/<%= event._id %>'">
+              <div class="event-overlay">
+                <h2><%= event.title %></h2>
+                <strong>Type:</strong> <%= event.type %><br>
+                <strong>Date:</strong> <%= event.eventDate.toDateString() %><br>
+                <strong>Location:</strong> <%= event.location %><br>
+                <p><strong>Tickets:</strong> <%= event.ticketQuantity %> | <strong>Price:</strong> <%= event.price.toFixed(2) %> BHD</p>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p style="padding:20px;">No favourite events yet.</p>
+      <% } %>
+    </div>
+<!-- Booked Events -->
+<div class="tab-content" id="booked">
+  <% if (bookedEvents && bookedEvents.length > 0) { %>
+    <% 
+      const eventBookings = {};
+      bookedEvents.forEach(event => {
+        event.attendees.forEach(att => {
+          if (att.user._id.toString() === profileUser._id.toString()) {
+            if (!eventBookings[event._id]) {
+              eventBookings[event._id] = { event, totalTickets: 0, totalPaid: 0 };
+            }
+            eventBookings[event._id].totalTickets += att.quantity;
+            eventBookings[event._id].totalPaid += att.totalPaid;
+          }
+        });
+      });
+      Object.values(eventBookings).forEach(eb => {
+    %>
+      <div class="ticket-container" onclick="window.location='/users/<%= profileUser._id %>/tickets/<%= eb.event._id %>'">
+        <div class="ticket-image">
+          <img src="<%= eb.event.ticketImage ? eb.event.ticketImage : '/Assets/tempTicketIMG.JPG' %>" alt="Ticket Image">
+        </div>
+        <div class="ticket-info">
+          <h2>Your Booking</h2>
+          <p><strong>Event:</strong> <%= eb.event.title %></p>
+          <p><strong>Type:</strong> <%= eb.event.type %></p>
+          <p><strong>Event Owner:</strong> <%= eb.event.owner.username %></p>
+          <p><strong>Date:</strong> <%= eb.event.eventDate.toDateString() %></p>
+          <p><strong>Time:</strong> <%= eb.event.startTime %> - <%= eb.event.endTime %></p>
+          <p><strong>Location:</strong> <%= eb.event.location %></p>
+          <p><strong>Total Tickets:</strong> <%= eb.totalTickets %></p>
+          <p><strong>Total Paid:</strong> BHD <%= eb.totalPaid.toFixed(3) %></p>
+        </div>
+      </div>
+    <% }) %>
+  <% } else { %>
+    <p style="padding:20px;">No booked events yet.</p>
+  <% } %>
+</div>
 
-    <!-- Booked Events -->
-    <h2>Booked Events</h2>
-    <% if (bookedEvents && bookedEvents.length > 0) { %>
-        <ul>
-            <% 
-                // Aggregate bookings by event
-                const eventBookings = {};
-                bookedEvents.forEach(event => {
-                    event.attendees.forEach(att => {
-                        if (att.user._id.toString() === profileUser._id.toString()) {
-                            if (!eventBookings[event._id]) {
-                                eventBookings[event._id] = {
-                                    event,
-                                    totalTickets: 0,
-                                    totalPaid: 0,
-                                };
-                            }
-                            eventBookings[event._id].totalTickets += att.quantity;
-                            eventBookings[event._id].totalPaid += att.totalPaid;
-                        }
-                    });
-                });
+  </div>
 
-                Object.values(eventBookings).forEach(eb => {
-            %>
-                <li>
-                    <strong>Event:</strong> <a href="/users/<%= profileUser._id %>/tickets/<%= eb.event._id %>"><%= eb.event.title %></a><br>
-                    <strong>Type:</strong> <%= eb.event.type %><br>
-                    <strong>Event Owner:</strong> <%= eb.event.owner.username %><br>
-                    <strong>Date:</strong> <%= eb.event.eventDate.toDateString() %><br>
-                    <strong>Start Time:</strong> <%= eb.event.startTime %><br>
-                    <strong>End Time:</strong> <%= eb.event.endTime %><br>
-                    <strong>Location:</strong> <%= eb.event.location %><br>
-                    <strong>Your Booking</strong><br>
-                    Total Tickets Booked: <%= eb.totalTickets %><br>
-                    Total Paid: BHD <%= eb.totalPaid.toFixed(3) %>
-                </li>
-            <% }) %>
-        </ul>
-    <% } else { %>
-        <p>No booked events yet.</p>
-    <% } %>
+  <script>
+    const tabButtons = document.querySelectorAll('.tab-buttons button');
+    const tabContents = document.querySelectorAll('.tab-content');
 
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        button.classList.add('active');
+        document.getElementById(button.dataset.tab).classList.add('active');
+      });
+    });
+  </script>
 </body>
 </html>

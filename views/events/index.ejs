@@ -4,35 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= category %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
    <%- include('../partials/_navbar.ejs') %>
 
-    <h1><%= category %></h1>
-
-    <% if (events.length > 0) { %>
-        <ul>
-            <% events.forEach((event) => { %>
-                <li>
-                    <strong>"<%= event.title %>"</strong><br>
-                    <strong>Type:</strong> <%= event.type %><br>
-                    <strong>Event Owner:</strong> <%= event.owner.username %><br>
-                    <strong>Date:</strong> <%= event.eventDate.toDateString() %><br>
-                    <strong>Start Time:</strong> <%= event.startTime %><br>
-                    <strong>End Time:</strong> <%= event.endTime %><br>
-                    <strong>Location:</strong> <%= event.location %><br>
-                    <strong>Tickets Available:</strong> <%= event.ticketQuantity %><br>
-                    <strong>Ticket Price:</strong> <%= event.price.toFixed(2) %> BHD<br>
-                    <a href="/events/<%= event._id %>">View more details</a><br><br>
-                </li>
-            <% }) %>
-        </ul>
-    <% } else { %>
-        <p>No events found in this category.</p>
-    <% } %>
+    <div class="header">
+        <h1><%= category %></h1>
+    </div>
 
     <% if(user) { %>
-        <a href="/events/new">Add a New Event</a>
+        <a href="/events/new" class="add-event-button">Add a New Event</a>
     <% } %>
+
+    
+
+    <% if (events.length > 0) { %>
+        <div class="event-list">
+            <% events.forEach((event) => { %>
+                <div 
+                    class="event-card" 
+                    style="background-image: url('<%= event.backgroundImage ? event.backgroundImage : '/Assets/headerBKG.JPG' %>');" 
+                    onclick="window.location='/events/<%= event._id %>'"
+                >
+                    <div class="event-overlay">
+                        <h2><%= event.title %></h2>
+                        <strong>Type:</strong> <%= event.type %><br>
+                        <strong>Date:</strong> <%= event.eventDate.toDateString() %><br>
+                        <strong>Location:</strong> <%= event.location %><br>
+                        <p><strong>Tickets:</strong> <%= event.ticketQuantity %> | 
+                        <strong>Price:</strong> <%= event.price.toFixed(2) %> BHD</p>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% } else { %>
+        <p style="padding:20px;">No events found in this category.</p>
+    <% } %>
+
 </body>
 </html>

@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
+    <%- include('partials/_navbar.ejs') %>
 
-  <%- include('partials/_navbar.ejs') %>
+    <div class="header" style="background-image: url('/Assets/headerBKG.jpg');">
+        <h1>Discover new events with Glided Realm</h1>
+    </div>
 
-<% if (user) { %>
-<h1>Welcome to the app, <%= user.username %>!</h1>
-<% } else { %>
-<h1>Welcome to the app, guest.</h1>
-<% } %>
+    <div class="video-container">
+        <video src="/Assets/glidedRealmVideo.MP4" autoplay loop muted class="video"></video>
+    </div>
 
+    <div class="about">
+        <h2>About</h2>
+        <p>We make a huge difference in the world we let the world enjoy with classic style.</p>
+    </div>
 </body>
 </html>
