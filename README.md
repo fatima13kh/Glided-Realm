@@ -1,96 +1,178 @@
-# MEN Stack Starter Template with Session Authentication
+# Glided Realm
 
-Welcome to the MEN Stack Starter Template! This template provides a foundational setup for building web applications using MongoDB, Express.js, and Node.js, complete with session authentication. This is ideal for students looking to kickstart their development projects.
+---
 
-## Table of Contents
-- [Prerequisites](#prerequisites)
-- [Clone the Repository](#clone-the-repository)
-- [Installation](#installation)
-- [Environment Setup](#environment-setup)
-- [Running the Application](#running-the-application)
-- [Removing Git and Creating Your Own Repo](#removing-git-and-creating-your-own-repo)
-- [Features](#features)
-- [Contributing](#contributing)
-- [License](#license)
+![Homepage](Assets/homepageScreenshot.png)
+![Event Page](Assets/eventPageScreenshot.png)
+![Venue Page](Assets/profilePageScreenshot.png)
+![Shoe Event Page](Assets/profilePageScreenshot.png)
+![Profile Page](Assets/profilePageScreenshot.png)
+![Edit Profile Page](Assets/profilePageScreenshot.png)
+![Ticket Page](Assets/profilePageScreenshot.png)
+![Sign-in Page](Assets/profilePageScreenshot.png)
+![Sign-up Page](Assets/profilePageScreenshot.png)
 
-## Prerequisites
+---
 
-Before you begin, ensure you have the following installed on your machine:
-- [Node.js](https://nodejs.org/) (LTS or later)
-- [MongoDB](https://www.mongodb.com/) (make sure it's running)
-- [Git](https://git-scm.com/) (for cloning the repository)
+## 🎨 Project Title: Glided Realm
 
-## Clone the Repository
+### What is Glided Realm?
 
-To clone this repository, open your terminal and run:
+**Glided Realm** is a web-based platform for posting, discovering, and booking events. Users can post events, and other users can view, favourite, and book tickets. The platform is designed for art and entertainment enthusiasts, featuring categories like:  
 
-```bash
-git clone https://github.com/SEB-PT-6-Solutions/men-stack-session-auth-template.git YOUR_APP_NAME_HERE
-```
+- **Venue:** Theatre, Opera, Parties  
+- **Art Gallery**  
+- **Ballet**  
+- **Runway Shows**  
 
-## Installation
-Navigate into the cloned directory:
-```bash
-cd YOUR_APP_NAME
-```
+The website focuses on providing visually engaging, Pinterest-inspired layouts with images and videos for each event.
 
-Then, install the necessary dependencies:
+---
 
-```bash
-npm i
-```
+## 🌟 Why This Project?
 
-## Environment Setup
-```plaintext
-MONGODB_URI=atlas_db_uri
-SESSION_SECRET=your_secret_key
-```
-Replace `atlas_db_uri` with your desired database name and `your_secret_key` with a secure key.
+I built **Glided Realm** to provide a digital space where art lovers can explore and attend curated events. Users can interact with events by booking tickets or saving favourites, creating a personal event management experience.
 
-## Removing Git and Creating Your Own Repo
-To remove the existing Git history and create your own repository:
+---
 
-1. Remove the existing .git folder:
-  ```bash
-  rm -rf .git
-  ```
-2. Initialize a new Git repository:
-  ```bash
-  git init
-  ```
-3. Add all files to the new repository:
-  ```bash
-  git add .
-  ```
-4. Commit the changes
-   ```bash
-   git commit -m "Initial commit"
-   ``` 
-5. Create a new repository on GitHub (or any other platform) and follow the instructions to push your local repository.
-  Make a new repository on [GitHub](https://github.com/) named `<your-project-name>`
-  Now link your local project to your remote GitHub repo:
-  ```bash
-  git remote add origin https://github.com/<github-username>/YOUR_APP_NAME.git
-  git push origin main
-  ```
+## 🧠 User Concept Overview
 
-> 🚨 Do not copy the above command. It will not work. Your GitHub username will replace `<github-username>` (including the `<` and `>`) in the URL above.
+### Event Attendees / Users
+* Browse events by category.
+* View detailed information about events: title, type, date, time, location, description, performers, and organizer.
+* Book tickets and see total payment.
+* Favourite events for later reference.
+* Track booked events and ticket history.
 
-## Running the application
-```bash
-npm run dev
-```
+### Event Organizers / Users
+* Post new events with background and ticket images.
+* Edit or delete events they created.
+* Manage ticket quantities, pricing, and event details.
+* Monitor attendees and bookings.
 
-## Features
-- User registration and login with session management
-- Basic CRUD operations
-- Modular file structure
-- Example routes and controllers
-- Basic user model setup
-- Middleware for templates and authorization
-- Basic authentication flow
+### General Users
+* Explore events without signing in, but need an account to book or favourite events.
 
-## License
-This project is licensed under the MIT License. See the LICENSE file for details.
+---
 
-Happy Coding!
+## ✅ Website Features
+
+* User registration and authentication (Sign Up / Sign In)  
+* Browse events by category: Venue, Art Gallery, Ballet, Runway  
+* View detailed event information  
+* Book tickets and see total cost  
+* Add events to favourites and track popularity  
+* Profile tabs to view posted, booked, and favourited events  
+* Organizers can manage events and monitor attendees  
+* Visual, Pinterest-style event card layouts  
+* Background images and ticket images for each event  
+
+---
+
+
+## 🚦 Routes
+
+### **1. Authentication Routes**
+
+| Method | Route            | Description                    |
+| ------ | ---------------- | ------------------------------ |
+| GET    | `/auth/sign-in`  | Display sign-in page           |
+| POST   | `/auth/sign-in`  | Handle sign-in form submission |
+| GET    | `/auth/sign-up`  | Display sign-up page           |
+| POST   | `/auth/sign-up`  | Handle sign-up form submission |
+| GET    | `/auth/sign-out` | Log out the user               |
+
+---
+
+### **2. User / Profile Routes**
+
+| Method | Route                             | Description                                                      |
+| ------ | --------------------------------- | ---------------------------------------------------------------- |
+| GET    | `/users/:userId`                  | Display user profile (tabs for posted, favourite, booked events) |
+| GET    | `/users/:userId/edit`             | Display edit profile page                                        |
+| POST   | `/users/:userId/edit`             | Handle profile updates                                           |
+| GET    | `/users/:userId/tickets/:eventId` | Display ticket for a booked event                                |
+
+---
+
+### **3. Event Routes**
+
+| Method | Route                             | Description                                                              |
+| ------ | --------------------------------- | ------------------------------------------------------------------------ |
+| GET    | `/events`                         | Display all events                                                       |
+| GET    | `/events/category/:categoryName`  | Display events filtered by category (Venue, Ballet, Runway, Art Gallery) |
+| GET    | `/events/:eventId`                | Display single event details                                             |
+| GET    | `/events/:eventId/edit`           | Display edit event page (owner only)                                     |
+| POST   | `/events`                         | Create a new event                                                       |
+| POST   | `/events/:eventId/book`           | Book tickets for a specific event                                        |
+| POST   | `/events/:eventId/favourite`      | Add or remove event from favourites                                      |
+| POST   | `/events/:eventId?_method=DELETE` | Delete an event (owner only)                                             |
+
+---
+
+### **4. Static / Miscellaneous**
+
+| Method | Route                          | Description                                   |
+| ------ | ------------------------------ | --------------------------------------------- |
+| GET    | `/`                            | Homepage (featured events & discover section) |
+| GET    | `/stylesheets/style.css`       | Main CSS file                                 |
+| GET    | `/javascripts/profile-tabs.js` | Script for profile tabs functionality         |
+| GET    | `/Assets/...`                  | Static assets (images, videos)                |
+
+---
+## 🚀 Getting Started
+
+
+### 🖥️ Steps to Use Glided Realm
+
+1. **Sign Up or Sign In**  
+   * Create an account to post, favourite, or book events.
+
+2. **Browse Events**  
+   * Explore events by category.  
+   * Click an event to view detailed information.
+
+3. **Book Tickets**  
+   * Select ticket quantity and complete booking.  
+   * See total cost and confirmation.
+
+4. **Favourite Events**  
+   * Save events for future reference.
+
+5. **Profile Management**  
+   * View posted, favourited, and booked events.  
+   * Edit personal details and password if needed.
+
+6. **Organize Events (For Creators)**  
+   * Add new events with images, date, time, ticket quantity, and price.  
+   * Edit or delete events and monitor attendees.
+
+---
+
+## Assets & Inspiration
+
+Images, videos, and layout inspiration for this project were sourced from [Pinterest](https://www.pinterest.com/), focusing on visual appeal and modern UI.  
+
+> These assets are used for educational purposes and UI/UX inspiration only. All rights belong to the original creators.
+
+---
+
+## 🧪 Technologies Used
+
+* **Backend:** Node.js, Express.js  
+* **Frontend:** EJS Templates, HTML5, CSS3, JavaScript  
+* **Database:** MongoDB  
+* **File Uploads:** Multer for event background and ticket images  
+* **Authentication:** Express Sessions, bcrypt for password hashing  
+* **Design Tools:** Figma for low fedality mockups 
+* **Styling & Layout:** Custom CSS  
+
+---
+
+## 🎯 Next Steps / Future Enhancements
+
+1. Implement search functionality by keywords and filters.  
+2. Add real-time notifications for bookings and event updates.  
+3. Integrate social media sharing (Instagram, Pinterest, etc.).  
+4. Add reviews and rating system for events.   
+6. Develop an admin dashboard for analytics and event moderation.  
