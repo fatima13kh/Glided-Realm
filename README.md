@@ -190,3 +190,5 @@ Images, videos, and layout inspiration for this project were sourced from [Pinte
 3. Integrate social media sharing (Instagram, Pinterest, etc.).  
 4. Add reviews and rating system for events.   
 6. Develop an admin dashboard for analytics and event moderation.  
+
+---
