@@ -2,15 +2,16 @@
 
 ---
 
-![Homepage](Assets/homepageScreenshot.png)
-![Event Page](Assets/eventPageScreenshot.png)
-![Venue Page](Assets/profilePageScreenshot.png)
-![Shoe Event Page](Assets/profilePageScreenshot.png)
-![Profile Page](Assets/profilePageScreenshot.png)
-![Edit Profile Page](Assets/profilePageScreenshot.png)
-![Ticket Page](Assets/profilePageScreenshot.png)
-![Sign-in Page](Assets/profilePageScreenshot.png)
-![Sign-up Page](Assets/profilePageScreenshot.png)
+![Homepage](Assets/homePage.png)
+![Event Page](Assets/eventPage.png)
+![New Event Page](Assets/newEventPage.png)
+![Show Event Page](Assets/showEvent.png)
+![Profile Page](Assets/profilePage.png)
+![Edit Profile Page](Assets/editProfilePage.png)
+![Ticket Page](Assets/ticketPage.png)
+![Ticket Page](Assets/showticket.png)
+![Sign-in Page](Assets/signInPage.png)
+![Sign-up Page](Assets/SignUpPage.png)
 
 ---
 
@@ -116,10 +117,23 @@ I built **Glided Realm** to provide a digital space where art lovers can explore
 | ------ | ------------------------------ | --------------------------------------------- |
 | GET    | `/`                            | Homepage (featured events & discover section) |
 | GET    | `/stylesheets/style.css`       | Main CSS file                                 |
-| GET    | `/javascripts/profile-tabs.js` | Script for profile tabs functionality         |
 | GET    | `/Assets/...`                  | Static assets (images, videos)                |
 
+
 ---
+
+## 🗂️ ERD Diagram
+
+![ERD Diagram](Assets/ERD.png)
+
+---
+## Project Management
+
+For detailed project tracking and task management, visit my Trello board:
+
+[Glided Realm Trello Board](https://trello.com/invite/b/68d16c89516455233f0e864e/ATTI94df1bd667c627f09c95cd2e2e8ebe09418C7E8B/glided-realm)
+
+
 ## 🚀 Getting Started
 
 
