@@ -4,12 +4,12 @@
 
 ![Homepage](Assets/homePage.png)
 ![Event Page](Assets/eventPage.png)
-![New Event Page](Assets/newEventPage.png)
-![Show Event Page](Assets/showEvent.png)
+![New Event Page](Assets/newEvent.png)
+![Show Event Page](Assets/showEventPage.png)
 ![Profile Page](Assets/profilePage.png)
 ![Edit Profile Page](Assets/editProfilePage.png)
 ![Ticket Page](Assets/ticketPage.png)
-![Ticket Page](Assets/showticket.png)
+![Ticket Page](Assets/showTicket.png)
 ![Sign-in Page](Assets/signInPage.png)
 ![Sign-up Page](Assets/SignUpPage.png)
 
