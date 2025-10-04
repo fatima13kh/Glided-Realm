@@ -32,7 +32,6 @@ router.get('/:userId', async (req, res) => {
       bookedEvents,
     });
   } catch (err) {
-    console.error(err);
     res.redirect('/');
   }
 });
@@ -50,7 +49,6 @@ router.get('/:userId/edit', async (req, res) => {
       errors: []
     });
   } catch (err) {
-    console.error(err);
     res.redirect('/');
   }
 });
@@ -124,7 +122,6 @@ router.post('/:userId/edit', async (req, res) => {
     // Redirect to profile page
     res.redirect(`/users/${userId}`);
   } catch (err) {
-    console.error(err);
     res.redirect('/');
   }
 });
@@ -159,7 +156,6 @@ router.get('/:userId/tickets/:eventId', async (req, res) => {
     });
 
   } catch (err) {
-    console.error(err);
     res.redirect(`/users/${req.params.userId}`);
   }
 });

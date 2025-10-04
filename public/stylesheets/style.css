@@ -1,17 +1,22 @@
+
 /* ===========================
    GLOBAL STYLES
    =========================== */
 body, html {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: serif;
+  background-color: #3a2113;  
 }
+
+
+
 
 /* ===========================
    NAVIGATION BAR
    =========================== */
 nav {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color:  rgba(0,0,0,0.6);
   padding: 15px 30px;
   display: flex;
   justify-content: center;
@@ -32,8 +37,9 @@ nav a {
   transition: background 0.3s, color 0.3s;
 }
 
-nav a:hover {
-  background-color: #007bff;
+nav a:hover,
+nav a.active {
+  background-color: #AE9697;
   color: white;
 }
 
@@ -44,7 +50,8 @@ nav a:hover {
   font-family: 'Georgia', serif;
   margin: 0;
   padding: 0;
-  background-color: #3D1A1A;
+  
+  
   color: white;
 }
 
@@ -58,7 +65,6 @@ nav a:hover {
     align-items: center;
     justify-content: center;
     color: white;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
 }
 
 
@@ -77,7 +83,7 @@ nav a:hover {
 .video-container {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 20px;
+ 
 }
 
 .video {
@@ -87,7 +93,7 @@ nav a:hover {
 }
 
 .about {
-  background-color: #B22222;
+  background-color: #411B0E;
   color: white;
   padding: 20px;
   margin: 0 20px;
@@ -113,7 +119,7 @@ nav a:hover {
   display: inline-block;
   margin: 20px;
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #AE9697;
   color: white;
   text-decoration: none;
   border-radius: 5px;
@@ -121,7 +127,7 @@ nav a:hover {
 }
 
 .add-event-button:hover {
-  background-color: #0056b3;
+  background-color: #D9C4C6;
 }
 
 .event-list {
@@ -181,7 +187,7 @@ nav a:hover {
 }
 
 .event-content {
-  background-color: rgba(139, 69, 19, 0.85);
+  background-color: rgba(0, 0, 0, 0.75);
   padding: 30px;
   border-radius: 12px;
   max-width: 800px;
@@ -226,7 +232,7 @@ nav a:hover {
 
 .event-content button {
   padding: 7px 15px;
-  background-color: #8B4513;
+  background-color: #AE9697;
   color: white;
   border: none;
   border-radius: 5px;
@@ -234,7 +240,7 @@ nav a:hover {
 }
 
 .event-content button:hover {
-  background-color: #A0522D;
+  background-color: ##A0522D;
 }
 
 .owner-section {
@@ -327,7 +333,7 @@ nav a:hover {
   padding: 12px;
   border: none;
   border-radius: 5px;
-  background-color: #007bff;
+  background-color: #AE9697;
   color: white;
   cursor: pointer;
   font-size: 16px;
@@ -338,7 +344,7 @@ nav a:hover {
 
 .form-container button:hover,
 .edit-container button:hover {
-  background-color: #0056b3;
+  background-color: #AE9697;
 }
 
 .current-image img {
@@ -414,7 +420,7 @@ nav a:hover {
 .profile-header h1 {
   margin: 0;
   font-size: 3em;
-  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+  color: white;
 }
 
 .profile-details {
@@ -424,6 +430,7 @@ nav a:hover {
   padding: 20px;
   border-radius: 12px;
   text-align: left;
+  color: white;
 }
 
 .profile-details p {
@@ -434,7 +441,7 @@ nav a:hover {
   padding: 8px 15px;
   margin-top: 10px;
   cursor: pointer;
-  background-color: #8B4513;
+  background-color: #AE9697;
   color: white;
   border: none;
   border-radius: 5px;
@@ -465,7 +472,7 @@ nav a:hover {
 }
 
 .tab-buttons button.active {
-  background-color: rgba(139,69,19,0.85);
+  background-color: #AE9697;
   border-bottom: 2px solid #fff;
 }
 
@@ -618,7 +625,7 @@ nav a:hover {
   padding: 12px;
   border: none;
   border-radius: 5px;
-  background-color: #007bff;
+  background-color: #AE9697;
   color: white;
   cursor: pointer;
   font-size: 16px;
@@ -626,7 +633,7 @@ nav a:hover {
 }
 
 .auth-form-wrapper button:hover {
-  background-color: #0056b3;
+  background-color: #D9C4C6;
 }
 
 .errors {
@@ -707,7 +714,7 @@ nav a:hover {
   padding: 12px;
   border: none;
   border-radius: 5px;
-  background-color: #007bff;
+  background-color: #AE9697;
   color: white;
   cursor: pointer;
   font-size: 16px;
@@ -719,6 +726,23 @@ nav a:hover {
 .edit-profile-container button:hover {
   background-color: #0056b3;
 }
+
+/* ===========================
+   FOOTER
+   =========================== */
+footer {
+  background-color: #322720; 
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  font-size: 14px;
+  margin-top: 50px;
+}
+
+footer p {
+  margin: 0;
+}
+
 
 /* ===========================
    RESPONSIVE DESIGN
@@ -740,3 +764,4 @@ nav a:hover {
   .edit-profile-container {
     padding: 25px;
   }
+}

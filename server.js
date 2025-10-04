@@ -49,6 +49,7 @@ app.use(
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // Add user variable to all templates
 app.use(passUserToView);
 

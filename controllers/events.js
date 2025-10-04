@@ -31,7 +31,6 @@ router.get('/', async (req, res) => {
       user: req.session.user
     });
   } catch (err) {
-    console.error(err);
     res.redirect('/');
   }
 });
@@ -47,7 +46,6 @@ router.get('/category/:category', async (req, res) => {
       category
     });
   } catch (err) {
-    console.error(err);
     res.redirect('/events');
   }
 });
@@ -170,7 +168,6 @@ if (!/^\d{8,10}$/.test(phone)) {
         res.redirect('/events');
 
     } catch (error) {
-        console.log(error);
         return res.render('events/new.ejs', {
             error: 'There was an error creating the event. Please check your inputs.',
             formData: req.body,
@@ -203,7 +200,6 @@ router.get('/:eventId', async (req, res) => {
       bookingMessage: null
     });
   } catch (error) {
-    console.log(error);
     res.redirect('/');
   }
   });
@@ -257,7 +253,6 @@ router.delete('/:eventId', async (req, res) => {
     return res.redirect('/events');
 
   } catch (error) {
-    console.error(error);
     return res.redirect('/');
   }
 });
@@ -286,7 +281,6 @@ router.get('/:eventId/edit', upload.fields([
       error: null
     });
   } catch (err) {
-    console.error(err);
     res.redirect('/events');
   }
 });
@@ -412,7 +406,6 @@ if (!/^\d{8,10}$/.test(phone)) {
     // Redirect to the event page
     res.redirect(`/events/${req.params.eventId}`);
   } catch (err) {
-    console.error(err);
     const times = generateTimes();
     res.render('events/edit.ejs', {
       event: req.body,
@@ -446,7 +439,6 @@ if (!/^\d{8,10}$/.test(phone)) {
     await user.save();
     res.redirect(`/events/${eventId}`);
   } catch (err) {
-    console.error(err);
     res.redirect('/');
   }
 });
@@ -543,7 +535,6 @@ router.post('/:eventId/book', async (req, res) => {
     });
 
   } catch (err) {
-    console.error(err);
     res.redirect('/');
   }
 });
